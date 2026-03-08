@@ -200,10 +200,81 @@ Chargia simplifies EV infrastructure deployment.
 </div>
 </section>
 
-<section class="cta">
+<!-- <section class="cta">
 <h2>Get Your EV Infrastructure Assessment</h2>
 <p>Discover how your property can support EV charging.</p>
 <a class="button" href="mailto:info@chargiaenergy.ca">Contact Us</a>
+</section> -->
+
+  <section id="assessment" style="padding:80px 10%; background:#f6f8fb;">
+  <h2 class="section-title">EV Readiness Assessment</h2>
+  <p style="text-align:center; max-width:800px; margin:0 auto 30px auto;">
+    Complete this short assessment and our team will review your property profile.
+  </p>
+
+  <form
+    action="https://formspree.io/f/xdawaodq"
+    method="POST"
+    style="max-width:800px; margin:0 auto; background:white; padding:30px; border-radius:12px;"
+  >
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div>
+        <label for="name"><strong>Full Name</strong></label><br>
+        <input type="text" id="name" name="name" required
+          style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;">
+      </div>
+
+      <div>
+        <label for="email"><strong>Email</strong></label><br>
+        <input type="email" id="email" name="email" required
+          style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;">
+      </div>
+
+      <div>
+        <label for="company"><strong>Organization / Property Manager</strong></label><br>
+        <input type="text" id="company" name="company"
+          style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;">
+      </div>
+
+      <div>
+        <label for="units"><strong>Number of Units</strong></label><br>
+        <input type="number" id="units" name="units"
+          style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;">
+      </div>
+
+      <div>
+        <label for="parking"><strong>Parking Type</strong></label><br>
+        <select id="parking" name="parking"
+          style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;">
+          <option value="">Select</option>
+          <option>Underground</option>
+          <option>Surface</option>
+          <option>Mixed</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="capacity"><strong>Available Electrical Capacity (kW)</strong></label><br>
+        <input type="text" id="capacity" name="capacity"
+          style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;">
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <label for="message"><strong>Property Notes</strong></label><br>
+      <textarea id="message" name="message" rows="5"
+        style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;"></textarea>
+    </div>
+
+    <input type="hidden" name="_subject" value="New Chargia EV Readiness Assessment Submission">
+
+    <div style="text-align:center;">
+      <button type="submit"
+        style="margin-top:25px; padding:15px 30px; background:#0057ff; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">
+        Submit Assessment
+      </button>
+    </div>
+  </form>
 </section>
 
 <section id="contact">
@@ -220,3 +291,4 @@ Toronto, Canada
 
 </body>
 </html>
+
