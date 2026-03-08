@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="509.13348"
+   height="720"
+   viewBox="0 0 509.13348 720"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3">
+      <path
+         d="M 0,0 H 365760.28 V 274320.21 H 0 Z"
+         id="path3" />
+    </clipPath>
+  </defs>
+  <g
+     id="g1"
+     transform="translate(-238.21505)">
+    <path
+       id="path1"
+       d="M 0,0 H 365760 V 274320 H 0 Z"
+       style="fill:#000000;fill-opacity:0;fill-rule:evenodd;stroke:none"
+       transform="scale(0.00262467)" />
+    <path
+       id="path2"
+       d="M 90760,-13736.411 H 284740 V 286479.6 H 90760 Z"
+       style="fill:#000000;fill-opacity:0;fill-rule:evenodd;stroke:none"
+       transform="scale(0.00262467)"
+       clip-path="url(#clipPath3)" />
+    <text
+       id="text3"
+       xml:space="preserve"
+       transform="translate(268.21524,569.26314)"><tspan
+         id="tspan3"
+         style="font-variant:normal;font-weight:normal;font-size:599.288px;font-family:Arial;writing-mode:lr-tb;fill:#1155cc;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         x="0"
+         y="0">C</tspan></text>
+    <path
+       id="path4"
+       d="M 105792.63,-14247.887 H 299772.62 V 285968.12 H 105792.63 Z"
+       style="fill:#000000;fill-opacity:0;fill-rule:evenodd;stroke:none"
+       transform="scale(0.00262467)"
+       clip-path="url(#clipPath3)" />
+    <text
+       id="text4"
+       xml:space="preserve"
+       transform="translate(307.67094,567.92069)"><tspan
+         id="tspan4"
+         style="font-variant:normal;font-weight:normal;font-size:599.288px;font-family:Arial;writing-mode:lr-tb;fill:#1155cc;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         x="0"
+         y="0">E</tspan></text>
+  </g>
+</svg>
