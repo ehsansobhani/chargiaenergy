@@ -443,7 +443,7 @@ Chargia simplifies EV infrastructure deployment.
   </form>
 </section> -->
 
-  <section id="assessment" class="assessment-section">
+  <!-- <section id="assessment" class="assessment-section">
   <h2 class="section-title">EV Readiness Assessment</h2>
   <p class="assessment-intro">
     Complete this assessment and our team will review your property profile and follow up with an EV readiness assessment.
@@ -834,6 +834,356 @@ Chargia simplifies EV infrastructure deployment.
 
     </div>
   </form>
+</section> -->
+
+  <section id="assessment" class="assessment-section">
+  <h2 class="section-title">Single-Building EV Readiness Assessment</h2>
+  <p class="assessment-intro">
+    Complete this detailed building assessment. All fields are required.
+  </p>
+
+  <form class="assessment-wrap" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+    <div class="form-grid">
+
+      <div class="section-heading">Building Contact Information</div>
+
+      <div class="form-field">
+        <label for="contact_name">Full Name *</label>
+        <input type="text" id="contact_name" name="contact_name" required>
+      </div>
+
+      <div class="form-field">
+        <label for="contact_email">Email *</label>
+        <input type="email" id="contact_email" name="contact_email" required>
+      </div>
+
+      <div class="form-field">
+        <label for="company_name">Organization / Property Manager *</label>
+        <input type="text" id="company_name" name="company_name" required>
+      </div>
+
+      <div class="form-field">
+        <label for="building_name">Building Name *</label>
+        <input type="text" id="building_name" name="building_name" required>
+      </div>
+
+      <div class="form-field full-width">
+        <label for="building_address">Building Address *</label>
+        <input type="text" id="building_address" name="building_address" required>
+      </div>
+
+      <div class="section-heading">Building Profile</div>
+
+      <fieldset class="fieldset-block">
+        <legend>1. Building type *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="building_type" value="Apartment building" required> Apartment building</label>
+          <label class="option-item"><input type="radio" name="building_type" value="Condominium"> Condominium</label>
+          <label class="option-item"><input type="radio" name="building_type" value="Mixed-use residential"> Mixed-use residential</label>
+          <label class="option-item"><input type="radio" name="building_type" value="Student housing"> Student housing</label>
+          <label class="option-item"><input type="radio" name="building_type" value="Affordable / non-profit housing"> Affordable / non-profit housing</label>
+          <label class="option-item"><input type="radio" name="building_type" value="Other"> Other</label>
+        </div>
+      </fieldset>
+
+      <div class="form-field">
+        <label for="year_built">2. Year built *</label>
+        <input type="number" id="year_built" name="year_built" min="1900" max="2100" required>
+      </div>
+
+      <div class="form-field">
+        <label for="num_units">3. Number of residential units *</label>
+        <input type="number" id="num_units" name="num_units" min="1" required>
+      </div>
+
+      <div class="form-field">
+        <label for="num_floors">4. Number of floors *</label>
+        <input type="number" id="num_floors" name="num_floors" min="1" required>
+      </div>
+
+      <fieldset class="fieldset-block">
+        <legend>5. Primary location region *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="region" value="Greater Toronto Area" required> Greater Toronto Area</label>
+          <label class="option-item"><input type="radio" name="region" value="Ottawa Region"> Ottawa Region</label>
+          <label class="option-item"><input type="radio" name="region" value="Hamilton / Niagara"> Hamilton / Niagara</label>
+          <label class="option-item"><input type="radio" name="region" value="London / Kitchener-Waterloo"> London / Kitchener-Waterloo</label>
+          <label class="option-item"><input type="radio" name="region" value="Northern Ontario"> Northern Ontario</label>
+          <label class="option-item"><input type="radio" name="region" value="Other"> Other</label>
+        </div>
+      </fieldset>
+
+      <div class="section-heading">Parking Characteristics</div>
+
+      <fieldset class="fieldset-block">
+        <legend>6. Parking type *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="parking_type" value="Underground structured parking" required> Underground structured parking</label>
+          <label class="option-item"><input type="radio" name="parking_type" value="Surface parking lot"> Surface parking lot</label>
+          <label class="option-item"><input type="radio" name="parking_type" value="Mixed underground and surface"> Mixed underground and surface</label>
+          <label class="option-item"><input type="radio" name="parking_type" value="Limited or no dedicated parking"> Limited or no dedicated parking</label>
+        </div>
+      </fieldset>
+
+      <div class="form-field">
+        <label for="parking_spaces">7. Total parking spaces *</label>
+        <input type="number" id="parking_spaces" name="parking_spaces" min="0" required>
+      </div>
+
+      <fieldset class="fieldset-block">
+        <legend>8. Parking-to-unit ratio *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="parking_unit_ratio" value="<0.5 spaces per unit" required> &lt;0.5 spaces per unit</label>
+          <label class="option-item"><input type="radio" name="parking_unit_ratio" value="0.5–1.0 spaces per unit"> 0.5–1.0 spaces per unit</label>
+          <label class="option-item"><input type="radio" name="parking_unit_ratio" value="1.0–1.5 spaces per unit"> 1.0–1.5 spaces per unit</label>
+          <label class="option-item"><input type="radio" name="parking_unit_ratio" value=">1.5 spaces per unit"> &gt;1.5 spaces per unit</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset-block">
+        <legend>9. Are parking spaces assigned? *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="parking_assignment" value="Yes — permanently assigned" required> Yes — permanently assigned</label>
+          <label class="option-item"><input type="radio" name="parking_assignment" value="Yes — but reallocated occasionally"> Yes — but reallocated occasionally</label>
+          <label class="option-item"><input type="radio" name="parking_assignment" value="No — shared parking"> No — shared parking</label>
+          <label class="option-item"><input type="radio" name="parking_assignment" value="Mixed arrangement"> Mixed arrangement</label>
+        </div>
+      </fieldset>
+
+      <div class="section-heading">Current EV Charging Status</div>
+
+      <fieldset class="fieldset-block">
+        <legend>10. Does this building currently have EV charging installed? *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="ev_installed" value="Yes" required> Yes</label>
+          <label class="option-item"><input type="radio" name="ev_installed" value="No"> No</label>
+          <label class="option-item"><input type="radio" name="ev_installed" value="Planned but not installed"> Planned but not installed</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset-block">
+        <legend>11. Installed charger types *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="charger_type" value="Level 2 chargers" required> Level 2 chargers</label>
+          <label class="option-item"><input type="radio" name="charger_type" value="DC fast chargers"> DC fast chargers</label>
+          <label class="option-item"><input type="radio" name="charger_type" value="Tenant-installed chargers"> Tenant-installed chargers</label>
+          <label class="option-item"><input type="radio" name="charger_type" value="Third-party operated chargers"> Third-party operated chargers</label>
+          <label class="option-item"><input type="radio" name="charger_type" value="Owner-operated chargers"> Owner-operated chargers</label>
+          <label class="option-item"><input type="radio" name="charger_type" value="Not applicable"> Not applicable</label>
+        </div>
+      </fieldset>
+
+      <div class="form-field">
+        <label for="ev_spaces_percent">12. Percentage of parking spaces with EV charging *</label>
+        <select id="ev_spaces_percent" name="ev_spaces_percent" required>
+          <option value="">Select one</option>
+          <option value="0%">0%</option>
+          <option value="<5%">&lt;5%</option>
+          <option value="5–15%">5–15%</option>
+          <option value="15–30%">15–30%</option>
+          <option value=">30%">&gt;30%</option>
+        </select>
+      </div>
+
+      <div class="section-heading">Tenant Demand</div>
+
+      <fieldset class="fieldset-block">
+        <legend>13. Have tenants requested EV charging? *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="tenant_requests" value="Frequently" required> Frequently</label>
+          <label class="option-item"><input type="radio" name="tenant_requests" value="Occasionally"> Occasionally</label>
+          <label class="option-item"><input type="radio" name="tenant_requests" value="Rarely"> Rarely</label>
+          <label class="option-item"><input type="radio" name="tenant_requests" value="Never"> Never</label>
+        </div>
+      </fieldset>
+
+      <div class="form-field">
+        <label for="tenant_ev_share">14. Estimated EV ownership among tenants *</label>
+        <select id="tenant_ev_share" name="tenant_ev_share" required>
+          <option value="">Select one</option>
+          <option value="<5%">&lt;5%</option>
+          <option value="5–10%">5–10%</option>
+          <option value="10–20%">10–20%</option>
+          <option value=">20%">&gt;20%</option>
+          <option value="Unknown">Unknown</option>
+        </select>
+      </div>
+
+      <fieldset class="fieldset-block">
+        <legend>15. Expected EV ownership growth in next 5 years? *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="ev_growth" value="Significant increase" required> Significant increase</label>
+          <label class="option-item"><input type="radio" name="ev_growth" value="Moderate increase"> Moderate increase</label>
+          <label class="option-item"><input type="radio" name="ev_growth" value="Small increase"> Small increase</label>
+          <label class="option-item"><input type="radio" name="ev_growth" value="No change"> No change</label>
+          <label class="option-item"><input type="radio" name="ev_growth" value="Unsure"> Unsure</label>
+        </div>
+      </fieldset>
+
+      <div class="section-heading">Electrical Infrastructure</div>
+
+      <fieldset class="fieldset-block">
+        <legend>16. Has an electrical capacity or load assessment been conducted? *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="load_assessment" value="Yes — engineering study completed" required> Yes — engineering study completed</label>
+          <label class="option-item"><input type="radio" name="load_assessment" value="Yes — preliminary review"> Yes — preliminary review</label>
+          <label class="option-item"><input type="radio" name="load_assessment" value="No"> No</label>
+          <label class="option-item"><input type="radio" name="load_assessment" value="Not sure"> Not sure</label>
+        </div>
+      </fieldset>
+
+      <div class="form-field">
+        <label for="service_size">17. Typical electrical service size *</label>
+        <select id="service_size" name="service_size" required>
+          <option value="">Select one</option>
+          <option value="<600 A">&lt;600 A</option>
+          <option value="600–1200 A">600–1200 A</option>
+          <option value="1200–2000 A">1200–2000 A</option>
+          <option value=">2000 A">&gt;2000 A</option>
+          <option value="Unsure">Unsure</option>
+        </select>
+      </div>
+
+      <fieldset class="fieldset-block">
+        <legend>18. Available electrical capacity for EV charging? *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="available_capacity" value="No available capacity" required> No available capacity</label>
+          <label class="option-item"><input type="radio" name="available_capacity" value="Limited capacity"> Limited capacity</label>
+          <label class="option-item"><input type="radio" name="available_capacity" value="Moderate capacity with load management"> Moderate capacity with load management</label>
+          <label class="option-item"><input type="radio" name="available_capacity" value="Significant capacity"> Significant capacity</label>
+          <label class="option-item"><input type="radio" name="available_capacity" value="Unknown"> Unknown</label>
+        </div>
+      </fieldset>
+
+      <div class="form-field">
+        <label for="capacity_kw">19. Estimated available capacity (kW) *</label>
+        <input type="number" id="capacity_kw" name="capacity_kw" min="0" required>
+      </div>
+
+      <div class="form-field">
+        <label for="utility_provider">20. Utility serving this building *</label>
+        <select id="utility_provider" name="utility_provider" required>
+          <option value="">Select one</option>
+          <option value="Toronto Hydro">Toronto Hydro</option>
+          <option value="Hydro One">Hydro One</option>
+          <option value="Alectra Utilities">Alectra Utilities</option>
+          <option value="London Hydro">London Hydro</option>
+          <option value="Ottawa Hydro">Ottawa Hydro</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-field full-width">
+        <label for="constraints">21. Primary infrastructure constraints *</label>
+        <textarea id="constraints" name="constraints" required placeholder="Describe transformer limits, feeder limits, panel constraints, upgrade needs, utility delays, parking layout constraints, or other issues."></textarea>
+      </div>
+
+      <div class="section-heading">Financial and Operating Preferences</div>
+
+      <div class="form-field">
+        <label for="capital_budget">22. Capital investment level considered for this building *</label>
+        <select id="capital_budget" name="capital_budget" required>
+          <option value="">Select one</option>
+          <option value="<$25,000">&lt;$25,000</option>
+          <option value="$25k–$100k">$25k–$100k</option>
+          <option value="$100k–$250k">$100k–$250k</option>
+          <option value="$250k–$500k">$250k–$500k</option>
+          <option value=">$500k">&gt;$500k</option>
+          <option value="Not evaluated">Not evaluated</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="payback_period">23. Acceptable payback period *</label>
+        <select id="payback_period" name="payback_period" required>
+          <option value="">Select one</option>
+          <option value="<5 years">&lt;5 years</option>
+          <option value="5–8 years">5–8 years</option>
+          <option value="8–12 years">8–12 years</option>
+          <option value=">12 years">&gt;12 years</option>
+          <option value="Not evaluated">Not evaluated</option>
+        </select>
+      </div>
+
+      <fieldset class="fieldset-block">
+        <legend>24. Preferred charging space allocation *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="allocation_method" value="Assigned spaces" required> Assigned spaces</label>
+          <label class="option-item"><input type="radio" name="allocation_method" value="Shared spaces"> Shared spaces</label>
+          <label class="option-item"><input type="radio" name="allocation_method" value="First-come first-served"> First-come first-served</label>
+          <label class="option-item"><input type="radio" name="allocation_method" value="Reservation system"> Reservation system</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset-block">
+        <legend>25. Preferred billing method *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="billing_method" value="Direct tenant billing" required> Direct tenant billing</label>
+          <label class="option-item"><input type="radio" name="billing_method" value="Mobile app/network billing"> Mobile app/network billing</label>
+          <label class="option-item"><input type="radio" name="billing_method" value="Flat monthly fee"> Flat monthly fee</label>
+          <label class="option-item"><input type="radio" name="billing_method" value="Sub-metering"> Sub-metering</label>
+          <label class="option-item"><input type="radio" name="billing_method" value="Third-party operator"> Third-party operator</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset-block">
+        <legend>26. Who should operate and maintain the charging infrastructure? *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="operator_preference" value="Property management" required> Property management</label>
+          <label class="option-item"><input type="radio" name="operator_preference" value="Third-party operator"> Third-party operator</label>
+          <label class="option-item"><input type="radio" name="operator_preference" value="Electrical contractor"> Electrical contractor</label>
+          <label class="option-item"><input type="radio" name="operator_preference" value="Utility partner"> Utility partner</label>
+          <label class="option-item"><input type="radio" name="operator_preference" value="Not determined"> Not determined</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset-block">
+        <legend>27. Would you consider shared high-power charging serving multiple vehicles per day? *</legend>
+        <div class="option-list">
+          <label class="option-item"><input type="radio" name="shared_high_power" value="Yes" required> Yes</label>
+          <label class="option-item"><input type="radio" name="shared_high_power" value="Possibly"> Possibly</label>
+          <label class="option-item"><input type="radio" name="shared_high_power" value="No"> No</label>
+          <label class="option-item"><input type="radio" name="shared_high_power" value="Need more information"> Need more information</label>
+        </div>
+      </fieldset>
+
+      <div class="form-field">
+        <label for="deployment_timeline">28. Expected EV charging deployment timeline *</label>
+        <select id="deployment_timeline" name="deployment_timeline" required>
+          <option value="">Select one</option>
+          <option value="Within 2 years">Within 2 years</option>
+          <option value="3–5 years">3–5 years</option>
+          <option value="5–10 years">5–10 years</option>
+          <option value="No plans">No plans</option>
+        </select>
+      </div>
+
+      <div class="form-field full-width">
+        <label for="support_needed">29. What support would most accelerate deployment at this building? *</label>
+        <textarea id="support_needed" name="support_needed" required placeholder="Describe the most valuable support needed, such as grants, utility support, technical advisory, permitting support, or forecasting tools."></textarea>
+      </div>
+
+      <fieldset class="fieldset-block full-width">
+        <legend>30. Are you interested in participating in a pilot EV charging program for this building? *</legend>
+        <div class="option-list inline-2">
+          <label class="option-item"><input type="radio" name="pilot_interest" value="Yes" required> Yes</label>
+          <label class="option-item"><input type="radio" name="pilot_interest" value="Maybe — request information"> Maybe — request information</label>
+          <label class="option-item"><input type="radio" name="pilot_interest" value="No"> No</label>
+        </div>
+      </fieldset>
+
+      <div class="form-field full-width">
+        <label for="additional_notes">31. Additional building notes *</label>
+        <textarea id="additional_notes" name="additional_notes" required placeholder="Add any details about tenant behavior, electrical room access, parking circulation, existing studies, or deployment concerns."></textarea>
+      </div>
+
+      <input type="hidden" name="_subject" value="New Single-Building Chargia EV Assessment Submission">
+
+      <div class="submit-row">
+        <button type="submit" class="submit-btn">Submit Detailed Building Assessment</button>
+      </div>
+    </div>
+  </form>
 </section>
 
 <section id="contact">
@@ -850,6 +1200,7 @@ Toronto, Canada
 
 </body>
 </html>
+
 
 
 
