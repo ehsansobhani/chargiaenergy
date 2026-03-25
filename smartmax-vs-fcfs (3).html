@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartMax vs FCFS — Charging Strategy Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#05080e;--bg2:#0a0f18;--panel:#0d1320;--panel2:#111828;--elevated:#161e2e;
+  --border:#182540;--border2:#1e2d4a;
+  --t1:#e4ecf7;--t2:#8c9bb5;--t3:#4a5a78;
+  --green:#0dd992;--green-bg:rgba(13,217,146,0.07);--green-b:rgba(13,217,146,0.22);
+  --blue:#4d8df7;--blue-bg:rgba(77,141,247,0.07);--blue-b:rgba(77,141,247,0.22);
+  --amber:#f0a030;--amber-bg:rgba(240,160,48,0.07);--amber-b:rgba(240,160,48,0.22);
+  --red:#f04848;--red-bg:rgba(240,72,72,0.07);--red-b:rgba(240,72,72,0.22);
+  --cyan:#18cdd8;--purple:#9b7af7;--orange:#f07830;--pink:#e860a0;
+  --mono:'IBM Plex Mono',monospace;--sans:'DM Sans',sans-serif;
+  --smart:#0dd992;--fcfs:#f04848;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--t1);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+
+/* ══ TOP BAR ══ */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--border);background:rgba(5,8,14,0.92);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;align-items:center;gap:14px;}
+.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--smart),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 0 20px rgba(13,217,146,0.18);}
+.brand{font-weight:800;font-size:16px;letter-spacing:-0.03em;}
+.brand-sub{font-size:10px;color:var(--t3);font-family:var(--mono);letter-spacing:0.06em;text-transform:uppercase;}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.live{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+.live.off{background:var(--amber);animation:none;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.clock{font-family:var(--mono);font-size:13px;color:var(--t2);}
+
+/* ══ CONFIG PANEL ══ */
+.config-bar{background:var(--panel);border-bottom:1px solid var(--border);padding:16px 24px;}
+.config-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--t3);margin-bottom:12px;}
+.config-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;align-items:end;}
+.cfg{display:flex;flex-direction:column;gap:3px;}
+.cfg label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:0.08em;}
+.cfg input,.cfg select{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--t1);outline:none;width:100%;}
+.cfg input:focus,.cfg select:focus{border-color:var(--green);}
+.cfg select{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%234a5a78'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:22px;cursor:pointer;}
+.cfg select option{background:var(--panel);color:var(--t1);}
+.config-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.btn{font-family:var(--sans);font-weight:700;font-size:12px;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;letter-spacing:0.02em;}
+.btn-run{background:linear-gradient(135deg,var(--green),#08b87a);color:#fff;box-shadow:0 3px 14px rgba(13,217,146,0.22);}
+.btn-run:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(13,217,146,0.3);}
+.btn-run:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-pause{background:linear-gradient(135deg,var(--amber),#d08820);color:#fff;}
+.btn-reset{background:var(--elevated);color:var(--t2);border:1px solid var(--border);}
+.btn-reset:hover{background:var(--panel2);}
+.speed-btns{display:flex;gap:3px;margin-left:auto;}
+.spd{font-family:var(--mono);font-size:10px;font-weight:600;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--t3);cursor:pointer;transition:all .2s;}
+.spd.on{background:var(--green-bg);color:var(--green);border-color:var(--green-b);}
+
+/* ══ MAIN LAYOUT ══ */
+.main{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 160px);}
+@media(max-width:1100px){.main{grid-template-columns:1fr;}}
+.scenario{padding:20px;border-right:1px solid var(--border);position:relative;}
+.scenario:last-child{border-right:none;}
+.scenario::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.scenario.smart::before{background:linear-gradient(90deg,var(--smart),var(--cyan));}
+.scenario.fcfs::before{background:linear-gradient(90deg,var(--fcfs),var(--orange));}
+
+.sc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sc-badge{display:flex;align-items:center;gap:10px;}
+.sc-dot{width:12px;height:12px;border-radius:4px;}
+.sc-name{font-weight:800;font-size:16px;letter-spacing:-0.02em;}
+.sc-tag{font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:0.06em;}
+.smart .sc-dot{background:var(--smart);box-shadow:0 0 10px rgba(13,217,146,0.3);}
+.smart .sc-tag{background:var(--green-bg);color:var(--green);border:1px solid var(--green-b);}
+.fcfs .sc-dot{background:var(--fcfs);box-shadow:0 0 10px rgba(240,72,72,0.3);}
+.fcfs .sc-tag{background:var(--red-bg);color:var(--fcfs);border:1px solid var(--red-b);}
+
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi-label{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:3px;}
+.kpi-val{font-family:var(--mono);font-size:18px;font-weight:700;}
+.kpi-unit{font-size:11px;font-weight:400;color:var(--t2);}
+
+/* EV mini cards */
+.ev-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;}
+@media(max-width:700px){.ev-list{grid-template-columns:1fr;}}
+.evc{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;transition:all .3s;}
+.evc.charging{border-color:var(--green-b);}
+.evc.waiting{opacity:.5;}
+.evc.done{border-color:rgba(24,205,216,0.2);opacity:.45;}
+.evc.idle-port{border-color:var(--amber-b);border-style:dashed;opacity:.35;}
+.evc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.evc-name{font-weight:700;font-size:11px;}
+.evc-status{font-family:var(--mono);font-size:9px;font-weight:600;}
+.evc-status.s-charging{color:var(--green);}
+.evc-status.s-waiting{color:var(--t3);}
+.evc-status.s-done{color:var(--cyan);}
+.evc-status.s-idle{color:var(--amber);}
+.evc-status.s-delay{color:var(--orange);}
+.evc-status.s-plugin{color:var(--purple);}
+.evc-bar{height:4px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;margin-bottom:3px;}
+.evc-fill{height:100%;border-radius:2px;transition:width .4s;}
+.evc-fill.low{background:linear-gradient(90deg,var(--red),var(--amber));}
+.evc-fill.mid{background:linear-gradient(90deg,var(--amber),var(--green));}
+.evc-fill.high{background:linear-gradient(90deg,var(--green),var(--cyan));}
+.evc-fill.shim{position:relative;}
+.evc-fill.shim::after{content:'';position:absolute;right:0;top:0;bottom:0;width:20px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2));animation:sh 1s ease-in-out infinite;}
+@keyframes sh{0%,100%{opacity:0}50%{opacity:1}}
+.evc-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--t3);}
+
+/* Chart */
+.chart-box{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
+.chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.chart-label{font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.chart-label::before{content:'';width:3px;height:14px;border-radius:2px;}
+.smart .chart-label::before{background:var(--smart);}
+.fcfs .chart-label::before{background:var(--fcfs);}
+.chart-wrap{position:relative;height:200px;}
+.ch-tabs{display:flex;gap:3px;}
+.ch-tab{font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--t3);cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.ch-tab.on{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-b);}
+
+/* ══ BOTTOM COMPARISON BAR ══ */
+.compare-bar{background:var(--panel);border-top:1px solid var(--border);padding:20px 24px;}
+.compare-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--t3);margin-bottom:14px;text-align:center;}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.cmp-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center;position:relative;overflow:hidden;}
+.cmp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--smart),var(--fcfs));}
+.cmp-label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:8px;}
+.cmp-row{display:flex;justify-content:center;gap:20px;align-items:baseline;}
+.cmp-val{font-family:var(--mono);font-size:22px;font-weight:700;}
+.cmp-val.smart-v{color:var(--smart);}
+.cmp-val.fcfs-v{color:var(--fcfs);}
+.cmp-vs{font-size:10px;color:var(--t3);font-weight:600;}
+.cmp-verdict{font-family:var(--mono);font-size:10px;margin-top:6px;font-weight:600;}
+.cmp-verdict.win{color:var(--smart);}
+.cmp-verdict.lose{color:var(--fcfs);}
+.cmp-verdict.tie{color:var(--t3);}
+
+/* Event log */
+.elog{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;max-height:140px;overflow-y:auto;font-family:var(--mono);font-size:10px;line-height:1.7;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.elog-evt{display:flex;gap:4px;animation:fi .25s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.elog-t{color:var(--t3);white-space:nowrap;}
+.elog-m{color:var(--t2);}
+.elog-hl{color:var(--t1);font-weight:600;}
+
+/* Stochastic info */
+.stoch-info{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:10px;color:var(--t2);line-height:1.6;margin-bottom:12px;font-family:var(--mono);}
+.stoch-info code{color:var(--cyan);background:rgba(24,205,216,0.08);padding:1px 4px;border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo">⚡</div>
+    <div><div class="brand">SmartMax vs FCFS</div><div class="brand-sub">Charging Strategy Benchmark</div></div>
+  </div>
+  <div class="topbar-right">
+    <div class="live off" id="liveDot"></div>
+    <div class="clock" id="clock">00:00:00</div>
+  </div>
+</div>
+
+<!-- CONFIG PANEL -->
+<div class="config-bar">
+  <div class="config-title">Simulation Parameters — Same Fleet for Both Scenarios</div>
+  <div class="config-grid">
+    <div class="cfg"><label>Number of EVs</label><input type="number" id="cfgEvCount" value="12" min="2" max="30"></div>
+    <div class="cfg"><label>Charging Ports</label><input type="number" id="cfgPorts" value="4" min="1" max="15"></div>
+    <div class="cfg"><label>Station Power (kW)</label><input type="number" id="cfgPower" value="350" min="50" max="800" step="10"></div>
+    <div class="cfg"><label>SoC Range Low %</label><input type="number" id="cfgSocLow" value="5" min="0" max="50"></div>
+    <div class="cfg"><label>SoC Range High %</label><input type="number" id="cfgSocHigh" value="40" min="10" max="70"></div>
+    <div class="cfg"><label>Target SoC %</label><input type="number" id="cfgTarget" value="80" min="50" max="100" step="5"></div>
+    <div class="cfg"><label>Max Charge Rate (kW)</label><input type="number" id="cfgMaxKW" value="150" min="30" max="350" step="10"></div>
+    <div class="cfg"><label>FCFS Unplug Delay (min)</label>
+      <select id="cfgUnplugDelay">
+        <option value="1">1-3 min (fast)</option>
+        <option value="3" selected>3-8 min (realistic)</option>
+        <option value="5">5-15 min (slow)</option>
+        <option value="10">10-30 min (very slow)</option>
+      </select>
+    </div>
+    <div class="cfg"><label>FCFS Plug-in Delay (min)</label>
+      <select id="cfgPluginDelay">
+        <option value="1">1-2 min (fast)</option>
+        <option value="2" selected>2-5 min (realistic)</option>
+        <option value="4">4-10 min (slow)</option>
+        <option value="8">8-20 min (very slow)</option>
+      </select>
+    </div>
+    <div class="cfg"><label>Battery Range (kWh)</label><input type="number" id="cfgBatLow" value="60" min="20" max="150"> </div>
+    <div class="cfg"><label>Battery High (kWh)</label><input type="number" id="cfgBatHigh" value="100" min="40" max="200"></div>
+    <div class="cfg"><label>Electricity Price ($/kWh)</label><input type="number" id="cfgPrice" value="0.35" min="0.05" max="2.00" step="0.05"></div>
+  </div>
+  <div class="config-actions">
+    <button class="btn btn-run" id="btnRun" onclick="runSim()">▶ Run Comparison</button>
+    <button class="btn btn-pause" id="btnPause" onclick="pauseSim()" style="display:none;">⏸ Pause</button>
+    <button class="btn btn-reset" onclick="resetAll()">↺ Reset</button>
+    <div class="speed-btns">
+      <button class="spd" onclick="setSpd(80,this)">0.5×</button>
+      <button class="spd on" id="spd1" onclick="setSpd(40,this)">1×</button>
+      <button class="spd" onclick="setSpd(15,this)">3×</button>
+      <button class="spd" onclick="setSpd(5,this)">8×</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN SPLIT -->
+<div class="main" id="mainArea">
+  <div class="scenario smart" id="scSmart">
+    <div class="sc-header">
+      <div class="sc-badge"><div class="sc-dot"></div><div class="sc-name">SmartMax</div></div>
+      <span class="sc-tag">Priority Queue · Dynamic Allocation</span>
+    </div>
+    <div class="stoch-info">
+      All <strong>N</strong> EVs enter queue at <code>t=0</code>. Top-scored EVs get ports instantly. Power allocated by <code>Score = 0.45·(1−SoC/T) + 0.35·U + 0.20·W</code>. <strong>Zero idle time</strong> — port reassigned the moment an EV finishes.
+    </div>
+    <div class="kpis" id="kpiSmart"></div>
+    <div class="ev-list" id="evListSmart"></div>
+    <div class="chart-box">
+      <div class="chart-head">
+        <div class="chart-label">Aggregate SoC Progress</div>
+        <div class="ch-tabs">
+          <button class="ch-tab on" onclick="setChartMode('smart','soc',this)">SoC</button>
+          <button class="ch-tab" onclick="setChartMode('smart','power',this)">Power</button>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartSmart"></canvas></div>
+    </div>
+    <div class="elog" id="logSmart"><div class="elog-evt"><span class="elog-t">--:--</span><span class="elog-m">Awaiting start</span></div></div>
+  </div>
+
+  <div class="scenario fcfs" id="scFCFS">
+    <div class="sc-header">
+      <div class="sc-badge"><div class="sc-dot"></div><div class="sc-name">First-Come First-Served</div></div>
+      <span class="sc-tag">Sequential · Stochastic Delays</span>
+    </div>
+    <div class="stoch-info">
+      First <strong>N</strong> EVs (by arrival order) occupy ports. Equal power split. When done: <code>unplug delay ~ U(min,max)</code> then port is empty, then <code>plug-in delay ~ U(min,max)</code> before next EV starts charging. <strong>Both delays</strong> cause port idle time.
+    </div>
+    <div class="kpis" id="kpiFCFS"></div>
+    <div class="ev-list" id="evListFCFS"></div>
+    <div class="chart-box">
+      <div class="chart-head">
+        <div class="chart-label">Aggregate SoC Progress</div>
+        <div class="ch-tabs">
+          <button class="ch-tab on" onclick="setChartMode('fcfs','soc',this)">SoC</button>
+          <button class="ch-tab" onclick="setChartMode('fcfs','power',this)">Power</button>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartFCFS"></canvas></div>
+    </div>
+    <div class="elog" id="logFCFS"><div class="elog-evt"><span class="elog-t">--:--</span><span class="elog-m">Awaiting start</span></div></div>
+  </div>
+</div>
+
+<!-- COMPARISON BAR -->
+<div class="compare-bar" id="compareBar">
+  <div class="compare-title">Performance Comparison</div>
+  <div class="compare-grid" id="compareGrid"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  SMARTMAX vs FCFS — DUAL SIMULATION ENGINE
+// ═══════════════════════════════════════════════════════
+
+const W_SOC=0.45, W_URG=0.35, W_WAIT=0.20;
+const URGENCY_POOL = [0,0,1,1,1,2,2,2,2,3,3,3]; // weighted distribution
+
+let simRunning=false, simDone=false, simTick=0, simTime=0, simInterval=null, tickMs=40;
+let smartState=null, fcfsState=null, sharedFleet=[];
+
+// ─── UTILITY ───
+function fmtTime(s){return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor((s%3600)/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');}
+function randBetween(a,b){return a+Math.random()*(b-a);}
+function randInt(a,b){return Math.floor(randBetween(a,b+1));}
+
+// ─── GENERATE SHARED FLEET ───
+function generateFleet(){
+  const n=parseInt(document.getElementById('cfgEvCount').value)||12;
+  const socLo=parseInt(document.getElementById('cfgSocLow').value)||5;
+  const socHi=parseInt(document.getElementById('cfgSocHigh').value)||40;
+  const target=parseInt(document.getElementById('cfgTarget').value)||80;
+  const maxKW=parseInt(document.getElementById('cfgMaxKW').value)||150;
+  const batLo=parseInt(document.getElementById('cfgBatLow').value)||60;
+  const batHi=parseInt(document.getElementById('cfgBatHigh').value)||100;
+  const names='Alpha Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliet Kilo Lima Mike Nova Oscar Papa Quebec Romeo Sierra Tango Uniform Victor Whiskey Xray Yankee Zulu'.split(' ');
+
+  sharedFleet=[];
+  for(let i=0;i<n;i++){
+    const soc=randBetween(socLo,socHi);
+    sharedFleet.push({
+      id:i,
+      name:'EV-'+(names[i%names.length]),
+      soc:+soc.toFixed(1),
+      target,
+      maxKW: Math.round(maxKW * randBetween(0.7,1.15) / 10)*10,
+      urgency: URGENCY_POOL[i%URGENCY_POOL.length],
+      batteryKWh: randInt(batLo,batHi),
+    });
+  }
+}
+
+// ─── CLONE FLEET INTO SCENARIO STATE ───
+function cloneFleet(){
+  return sharedFleet.map(ev=>({
+    ...ev,
+    soc:ev.soc, origSoc:ev.soc,
+    status:'waiting', allocKW:0,
+    arrivalTick:0, connected:true,
+    doneAt:null, delayUntil:null,
+    energyDelivered:0, timeCharging:0, timeWaiting:0,
+  }));
+}
+
+// ─── DELAY CONFIG ───
+function getUnplugDelayRange(){
+  const v=document.getElementById('cfgUnplugDelay').value;
+  switch(v){
+    case '1': return [60,180];
+    case '3': return [180,480];
+    case '5': return [300,900];
+    case '10': return [600,1800];
+    default: return [180,480];
+  }
+}
+function getPluginDelayRange(){
+  const v=document.getElementById('cfgPluginDelay').value;
+  switch(v){
+    case '1': return [60,120];
+    case '2': return [120,300];
+    case '4': return [240,600];
+    case '8': return [480,1200];
+    default: return [120,300];
+  }
+}
+
+// ═══ SMARTMAX ENGINE ═══
+function smartInit(){
+  const ports=parseInt(document.getElementById('cfgPorts').value)||4;
+  const power=parseInt(document.getElementById('cfgPower').value)||350;
+  const price=parseFloat(document.getElementById('cfgPrice').value)||0.35;
+  return {
+    evs: cloneFleet(),
+    ports, power, price,
+    totalEnergy:0, portIdleTime:0, log:[],
+    socHist:[], pwrHist:[], avgSocHist:[],
+    chartMode:'soc',
+    finishedAt:null,
+  };
+}
+
+function smartScore(ev,st){
+  if(ev.status==='done'||!ev.connected) return -1;
+  const deficit=1-(ev.soc/ev.target);
+  const urg=1-(ev.urgency/3);
+  const eligible=st.evs.filter(e=>e.connected&&e.status!=='done');
+  const maxW=Math.max(1,...eligible.map(e=>simTick-e.arrivalTick));
+  const wt=(simTick-ev.arrivalTick)/maxW;
+  return W_SOC*Math.max(0,deficit)+W_URG*urg+W_WAIT*wt;
+}
+
+function smartAllocate(st){
+  st.evs.forEach(e=>{e.allocKW=0; if(e.connected&&e.status!=='done') e.status='waiting';});
+  const eligible=st.evs.filter(e=>e.connected&&e.status!=='done');
+  if(!eligible.length) return;
+  const scored=eligible.map(e=>({ev:e,s:smartScore(e,st)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s);
+  const topN=scored.slice(0,st.ports);
+  scored.slice(st.ports).forEach(x=>{x.ev.status='waiting';});
+  if(!topN.length) return;
+  const totS=topN.reduce((s,x)=>s+x.s,0);
+  let rem=st.power;
+  topN.forEach(x=>{
+    const share=(x.s/totS)*st.power;
+    const cap=Math.min(share,x.ev.maxKW,rem);
+    x.ev.allocKW=Math.round(cap); rem-=x.ev.allocKW; x.ev.status='charging';
+  });
+  if(rem>0) for(const x of topN){
+    const ct=Math.min(rem,x.ev.maxKW-x.ev.allocKW);
+    if(ct>0){x.ev.allocKW+=Math.round(ct);rem-=Math.round(ct);}
+    if(rem<=0)break;
+  }
+}
+
+function smartTick(st){
+  smartAllocate(st);
+  // Track idle: if fewer charging than ports, idle accumulates
+  const chargingN=st.evs.filter(e=>e.status==='charging').length;
+  st.portIdleTime+=(st.ports-chargingN)*30;
+
+  st.evs.forEach(ev=>{
+    if(ev.status==='charging'&&ev.allocKW>0){
+      ev.timeCharging+=30;
+      const kwh=ev.allocKW*(30/3600);
+      const gain=(kwh/ev.batteryKWh)*100;
+      const tf=ev.soc>(ev.target*0.85)?(1-(ev.soc-ev.target*0.85)/(ev.target*0.15)):1;
+      const actualGain=gain*Math.max(0.2,tf);
+      ev.soc=Math.min(ev.target,ev.soc+actualGain);
+      ev.energyDelivered+=kwh*Math.max(0.2,tf);
+      if(ev.soc>=ev.target){
+        ev.soc=ev.target;ev.status='done';ev.allocKW=0;ev.doneAt=simTime;
+        addLog(st,`<span class="elog-hl" style="color:var(--green)">✓ ${ev.name}</span> reached ${ev.target}%`);
+      }
+    } else if(ev.status==='waiting'){
+      ev.timeWaiting+=30;
+    }
+  });
+
+  const totalPwr=st.evs.reduce((s,e)=>s+e.allocKW,0);
+  st.totalEnergy+=totalPwr*(30/3600);
+
+  // History
+  const t=fmtTime(simTime);
+  const sE={time:t}, pE={time:t};
+  st.evs.forEach(ev=>{sE['ev'+ev.id]=+ev.soc.toFixed(1);pE['ev'+ev.id]=ev.allocKW;});
+  const avgSoc=st.evs.reduce((s,e)=>s+e.soc,0)/st.evs.length;
+  sE._avg=+avgSoc.toFixed(1); pE._total=totalPwr;
+  st.socHist.push(sE); st.pwrHist.push(pE); st.avgSocHist.push({time:t,v:avgSoc});
+}
+
+// ═══ FCFS ENGINE ═══
+function fcfsInit(){
+  const ports=parseInt(document.getElementById('cfgPorts').value)||4;
+  const power=parseInt(document.getElementById('cfgPower').value)||350;
+  const evs=cloneFleet();
+  // Assign queue position = index order (first come)
+  evs.forEach((ev,i)=>{ev.queuePos=i;});
+  const price=parseFloat(document.getElementById('cfgPrice').value)||0.35;
+  return {
+    evs, ports, power, price,
+    totalEnergy:0, portIdleTime:0, totalUnplugDelay:0, totalPluginDelay:0, log:[],
+    socHist:[], pwrHist:[], avgSocHist:[],
+    chartMode:'soc',
+    portSlots: Array(ports).fill(null), // each slot holds ev.id or null
+    portPluginUntil: Array(ports).fill(0), // simTime when plug-in finishes for this port
+    portPluginEV: Array(ports).fill(null), // ev.id being plugged in
+    finishedAt:null,
+  };
+}
+
+function fcfsAllocate(st){
+  const [uLo,uHi]=getUnplugDelayRange();
+  const [pLo,pHi]=getPluginDelayRange();
+
+  // Phase 1: Handle ports with plug-in delays completing
+  for(let p=0;p<st.ports;p++){
+    if(st.portPluginEV[p]!==null && simTime>=st.portPluginUntil[p]){
+      // Plug-in complete — EV starts charging
+      const ev=st.evs.find(e=>e.id===st.portPluginEV[p]);
+      if(ev){
+        ev.status='charging';
+        st.portSlots[p]=ev.id;
+        addLog(st,`<span class="elog-hl" style="color:var(--blue)">🔌 ${ev.name}</span> plugged in → Port ${p+1} — charging`);
+      }
+      st.portPluginEV[p]=null;
+      st.portPluginUntil[p]=0;
+    }
+  }
+
+  // Phase 2: Handle done EVs → start unplug delay
+  for(let p=0;p<st.ports;p++){
+    const eid=st.portSlots[p];
+    if(eid===null) continue;
+    const ev=st.evs.find(e=>e.id===eid);
+    if(!ev){st.portSlots[p]=null;continue;}
+
+    if(ev.status==='done'){
+      // Start unplug delay
+      if(ev.delayUntil===null){
+        const delay=randBetween(uLo,uHi);
+        ev.delayUntil=simTime+delay;
+        ev.status='delay';
+        addLog(st,`<span style="color:var(--orange)">⏳ ${ev.name}</span> done — unplugging takes ~${Math.round(delay/60)} min`);
+      }
+    }
+    if(ev.status==='delay' && simTime>=ev.delayUntil){
+      // Unplug complete — port is now empty
+      ev.connected=false;
+      st.portSlots[p]=null;
+      addLog(st,`<span style="color:var(--fcfs)">⏏ ${ev.name}</span> unplugged from Port ${p+1}`);
+    }
+  }
+
+  // Phase 3: Fill empty ports (no active plug-in happening) from queue with plug-in delay
+  const queued=st.evs.filter(e=>e.connected&&e.status==='waiting').sort((a,b)=>a.queuePos-b.queuePos);
+  for(let p=0;p<st.ports;p++){
+    if(st.portSlots[p]===null && st.portPluginEV[p]===null && queued.length>0){
+      const ev=queued.shift();
+      ev.status='plugin'; // new status: being plugged in
+      const delay=randBetween(pLo,pHi);
+      st.portPluginEV[p]=ev.id;
+      st.portPluginUntil[p]=simTime+delay;
+      addLog(st,`<span style="color:var(--purple)">🔄 ${ev.name}</span> plugging into Port ${p+1} — ~${Math.round(delay/60)} min`);
+    }
+  }
+
+  // Phase 4: Allocate equal power to actively-charging EVs only
+  st.evs.forEach(e=>{e.allocKW=0;});
+  const chargingEvs=st.evs.filter(e=>e.status==='charging');
+  if(chargingEvs.length>0){
+    const each=Math.floor(st.power/chargingEvs.length);
+    chargingEvs.forEach(ev=>{ev.allocKW=Math.min(each,ev.maxKW);});
+  }
+}
+
+function fcfsTick(st){
+  fcfsAllocate(st);
+
+  // Port idle time: count null slots (empty) + delay slots (unplugging) + plugin slots (plugging in)
+  const idleSlots=st.portSlots.filter(id=>{
+    if(id===null) return true;
+    const ev=st.evs.find(e=>e.id===id);
+    return ev && (ev.status==='delay'||ev.status==='done');
+  }).length;
+  // Also count ports with plug-in in progress (port occupied but not charging)
+  const pluginSlots=st.portPluginEV.filter(id=>id!==null).length;
+  st.portIdleTime+=(idleSlots+pluginSlots)*30;
+
+  // Track unplug delay time
+  const delaySlots=st.portSlots.filter(id=>{
+    if(id===null) return false;
+    const ev=st.evs.find(e=>e.id===id);
+    return ev && ev.status==='delay';
+  }).length;
+  st.totalUnplugDelay+=delaySlots*30;
+
+  // Track plug-in delay time
+  st.totalPluginDelay+=pluginSlots*30;
+
+  st.evs.forEach(ev=>{
+    if(ev.status==='charging'&&ev.allocKW>0){
+      ev.timeCharging+=30;
+      const kwh=ev.allocKW*(30/3600);
+      const gain=(kwh/ev.batteryKWh)*100;
+      const tf=ev.soc>(ev.target*0.85)?(1-(ev.soc-ev.target*0.85)/(ev.target*0.15)):1;
+      const actualGain=gain*Math.max(0.2,tf);
+      ev.soc=Math.min(ev.target,ev.soc+actualGain);
+      ev.energyDelivered+=kwh*Math.max(0.2,tf);
+      if(ev.soc>=ev.target){
+        ev.soc=ev.target;ev.status='done';ev.allocKW=0;ev.doneAt=simTime;
+        addLog(st,`<span class="elog-hl" style="color:var(--green)">✓ ${ev.name}</span> reached ${ev.target}%`);
+      }
+    } else if(ev.status==='waiting'||ev.status==='plugin'){
+      ev.timeWaiting+=30;
+    }
+  });
+
+  const totalPwr=st.evs.reduce((s,e)=>s+e.allocKW,0);
+  st.totalEnergy+=totalPwr*(30/3600);
+
+  const t=fmtTime(simTime);
+  const sE={time:t}, pE={time:t};
+  st.evs.forEach(ev=>{sE['ev'+ev.id]=+ev.soc.toFixed(1);pE['ev'+ev.id]=ev.allocKW;});
+  const avgSoc=st.evs.reduce((s,e)=>s+e.soc,0)/st.evs.length;
+  sE._avg=+avgSoc.toFixed(1); pE._total=totalPwr;
+  st.socHist.push(sE); st.pwrHist.push(pE); st.avgSocHist.push({time:t,v:avgSoc});
+}
+
+// ─── LOGGING ───
+function addLog(st,msg){
+  st.log.push({t:fmtTime(simTime),msg});
+}
+
+// ═══ CHARTS ═══
+let chartSmart=null, chartFCFS=null;
+const COLORS=['#4d8df7','#9b7af7','#e860a0','#f07830','#18cdd8','#84cc16','#f04848','#6366f1','#14b8a6','#d946ef','#0ea5e9','#34d399','#f0a030','#ef4444','#8b5cf6','#0dd992','#f07830','#e860a0','#4d8df7','#9b7af7','#18cdd8','#84cc16','#f04848','#6366f1','#14b8a6','#d946ef','#0ea5e9','#34d399'];
+
+function initCharts(){
+  [chartSmart,chartFCFS].forEach(c=>{if(c)c.destroy();});
+  const opts=(id)=>({type:'line',data:{labels:[],datasets:[]},options:{
+    responsive:true,maintainAspectRatio:false,animation:{duration:0},interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111827',titleColor:'#e4ecf7',bodyColor:'#8c9bb5',borderColor:'#182540',borderWidth:1,titleFont:{family:'IBM Plex Mono',size:9},bodyFont:{family:'IBM Plex Mono',size:9},padding:6,cornerRadius:5}},
+    scales:{x:{display:true,grid:{color:'rgba(255,255,255,0.02)'},ticks:{color:'#4a5a78',font:{family:'IBM Plex Mono',size:8},maxTicksLimit:10}},
+    y:{grid:{color:'rgba(255,255,255,0.02)'},ticks:{color:'#4a5a78',font:{family:'IBM Plex Mono',size:8}},min:0}}
+  }});
+  chartSmart=new Chart(document.getElementById('chartSmart').getContext('2d'),opts());
+  chartFCFS=new Chart(document.getElementById('chartFCFS').getContext('2d'),opts());
+}
+
+function updateChart(chart,st){
+  if(!chart||!st) return;
+  const mode=st.chartMode||'soc';
+  const hist=mode==='soc'?st.socHist:st.pwrHist;
+  let data=hist; const mx=100;
+  if(data.length>mx){const step=Math.ceil(data.length/mx);data=data.filter((_,i)=>i%step===0||i===data.length-1);}
+  chart.data.labels=data.map(d=>d.time);
+
+  if(mode==='soc'){
+    // Show avg SoC as thick line + individual EVs as thin
+    const avgDs={label:'Avg SoC',data:data.map(d=>d._avg),borderColor:'#fff',backgroundColor:'rgba(255,255,255,0.05)',borderWidth:2.5,pointRadius:0,tension:.3,fill:false};
+    const evDs=st.evs.map((ev,i)=>({label:ev.name,data:data.map(d=>d['ev'+ev.id]),borderColor:COLORS[i%COLORS.length]+'88',borderWidth:1,pointRadius:0,tension:.3,fill:false}));
+    chart.data.datasets=[avgDs,...evDs];
+    chart.options.scales.y.max=100;
+    chart.options.scales.y.title={display:true,text:'SoC %',color:'#4a5a78',font:{family:'DM Sans',size:10}};
+  } else {
+    const totalDs={label:'Total Power',data:data.map(d=>d._total),borderColor:'#f0a030',backgroundColor:'rgba(240,160,48,0.08)',borderWidth:2,pointRadius:0,tension:.3,fill:true};
+    chart.data.datasets=[totalDs];
+    chart.options.scales.y.max=undefined;
+    chart.options.scales.y.title={display:true,text:'Power (kW)',color:'#4a5a78',font:{family:'DM Sans',size:10}};
+  }
+  chart.update('none');
+}
+
+function setChartMode(which,mode,btn){
+  const st=which==='smart'?smartState:fcfsState;
+  if(st) st.chartMode=mode;
+  const parent=btn.parentElement;
+  parent.querySelectorAll('.ch-tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  updateChart(which==='smart'?chartSmart:chartFCFS,st);
+}
+
+// ═══ RENDERING ═══
+function renderKPIs(containerId,st,color){
+  const done=st.evs.filter(e=>e.status==='done'||!e.connected).length;
+  const total=st.evs.length;
+  const revenue=st.totalEnergy*st.price;
+  const elapsedSec=st.finishedAt?st.finishedAt:simTime;
+  const revenuePerHr=elapsedSec>0?(revenue/(elapsedSec/3600)):0;
+  const elapsed=st.finishedAt?fmtTime(st.finishedAt):(simTime>0?fmtTime(simTime)+' …':'—');
+
+  document.getElementById(containerId).innerHTML=`
+    <div class="kpi"><div class="kpi-label">Revenue</div><div class="kpi-val" style="color:${color}">$${revenue.toFixed(2)}</div></div>
+    <div class="kpi"><div class="kpi-label">Throughput</div><div class="kpi-val">$${revenuePerHr.toFixed(1)}<span class="kpi-unit">/hr</span></div></div>
+    <div class="kpi"><div class="kpi-label">Completed</div><div class="kpi-val">${done}<span class="kpi-unit"> / ${total}</span></div></div>
+    <div class="kpi"><div class="kpi-label">Elapsed</div><div class="kpi-val" style="font-size:15px;${st.finishedAt?'color:'+color:''}">${elapsed}</div></div>
+  `;
+}
+
+function renderEVList(containerId,st,isFCFS){
+  const el=document.getElementById(containerId);
+  // Sort: charging first, then waiting/delay, then done
+  const order={charging:0,plugin:1,delay:2,waiting:3,done:4};
+  const sorted=[...st.evs].sort((a,b)=>(order[a.status]||9)-(order[b.status]||9));
+
+  el.innerHTML=sorted.map(ev=>{
+    const scl=ev.soc<25?'low':ev.soc<60?'mid':'high';
+    const shim=ev.status==='charging'?' shim':'';
+    const cls=ev.status==='delay'?'idle-port':ev.status==='plugin'?'idle-port':ev.status;
+    const stCl=ev.status==='delay'?'s-delay':ev.status==='plugin'?'s-plugin':ev.status==='charging'?'s-charging':ev.status==='done'?'s-done':'s-waiting';
+    const stTx=ev.status==='delay'?'⏳ UNPLUGGING':ev.status==='plugin'?'🔄 PLUGGING IN':ev.status==='charging'?'● CHARGING':ev.status==='done'?'✓ DONE':'◌ QUEUE #'+(st.evs.filter(e=>e.status==='waiting').sort((a,b)=>a.queuePos-b.queuePos).indexOf(ev)+1);
+    const stTxSmart=ev.status==='charging'?'● CHARGING':ev.status==='done'?'✓ DONE':'◌ WAITING';
+    return `<div class="evc ${cls}">
+      <div class="evc-top"><span class="evc-name">${ev.name}</span><span class="evc-status ${stCl}">${isFCFS?stTx:stTxSmart}</span></div>
+      <div class="evc-bar"><div class="evc-fill ${scl}${shim}" style="width:${(ev.soc/ev.target*100).toFixed(1)}%"></div></div>
+      <div class="evc-meta"><span>SoC ${ev.soc.toFixed(1)}%</span><span>${ev.allocKW}kW</span><span>${ev.batteryKWh}kWh</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderLog(containerId,st){
+  const el=document.getElementById(containerId);
+  // Only render last 40
+  const recent=st.log.slice(-40);
+  el.innerHTML=recent.map(e=>`<div class="elog-evt"><span class="elog-t">${e.t}</span><span class="elog-m">${e.msg}</span></div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+function renderComparison(){
+  if(!smartState||!fcfsState) return;
+  const s=smartState, f=fcfsState;
+  const sDone=s.evs.filter(e=>e.status==='done'||!e.connected).length;
+  const fDone=f.evs.filter(e=>e.status==='done'||!e.connected).length;
+  const sElapsed=s.finishedAt?s.finishedAt:simTime;
+  const fElapsed=f.finishedAt?f.finishedAt:simTime;
+
+  // Utilization: use each scenario's own elapsed time, not global simTime
+  const sUtilBase=sElapsed>0?(sElapsed*s.ports):1;
+  const fUtilBase=fElapsed>0?(fElapsed*f.ports):1;
+  const sUtil=sUtilBase>0?((1-s.portIdleTime/sUtilBase)*100):100;
+  const fUtil=fUtilBase>0?((1-f.portIdleTime/fUtilBase)*100):100;
+
+  const sEnergy=s.totalEnergy;
+  const fEnergy=f.totalEnergy;
+  const sRevenue=sEnergy*s.price;
+  const fRevenue=fEnergy*f.price;
+
+  // Throughput: revenue per hour (the real differentiator)
+  const sRevenuePerHr=sElapsed>0?(sRevenue/(sElapsed/3600)):0;
+  const fRevenuePerHr=fElapsed>0?(fRevenue/(fElapsed/3600)):0;
+
+  // FCFS delay breakdown
+  const fUnplugDelay=f.totalUnplugDelay/60;
+  const fPluginDelay=f.totalPluginDelay/60;
+  const fTotalIdleMin=(f.totalUnplugDelay+f.totalPluginDelay)/60;
+
+  // Opportunity cost: during idle port-minutes, FCFS could have been earning
+  // = idle_port_hours × (power_per_port) × price
+  const fIdlePortHrs=(f.totalUnplugDelay+f.totalPluginDelay)/3600;
+  const fOpportunityCost=fIdlePortHrs*(f.power/f.ports)*f.price;
+
+  const timeSaved=fElapsed-sElapsed;
+
+  const metrics=[
+    {label:'Revenue',sv:'$'+sRevenue.toFixed(2),fv:'$'+fRevenue.toFixed(2),sWin:false,fWin:false}, // same energy = same revenue, mark as tied
+    {label:'Revenue/Hour',sv:'$'+sRevenuePerHr.toFixed(2)+'/hr',fv:'$'+fRevenuePerHr.toFixed(2)+'/hr',sWin:sRevenuePerHr>fRevenuePerHr+0.5,fWin:fRevenuePerHr>sRevenuePerHr+0.5},
+    {label:'Elapsed Time',sv:fmtTime(sElapsed),fv:fmtTime(fElapsed),sWin:sElapsed<fElapsed-30,fWin:fElapsed<sElapsed-30},
+    {label:'Time Saved',sv:timeSaved>0?fmtTime(timeSaved):'—',fv:timeSaved<0?fmtTime(-timeSaved):'—',sWin:timeSaved>30,fWin:timeSaved<-30},
+    {label:'Port Utilization',sv:Math.max(0,sUtil).toFixed(1)+'%',fv:Math.max(0,fUtil).toFixed(1)+'%',sWin:sUtil>fUtil+1,fWin:fUtil>sUtil+1},
+    {label:'EVs Completed',sv:sDone,fv:fDone,sWin:sDone>fDone,fWin:fDone>sDone},
+    {label:'FCFS Unplug Idle',sv:'0 min',fv:fUnplugDelay.toFixed(1)+' min',sWin:fUnplugDelay>0,fWin:false},
+    {label:'FCFS Plug-in Idle',sv:'0 min',fv:fPluginDelay.toFixed(1)+' min',sWin:fPluginDelay>0,fWin:false},
+    {label:'FCFS Opportunity Cost',sv:'$0.00',fv:'$'+fOpportunityCost.toFixed(2),sWin:fOpportunityCost>0.5,fWin:false},
+  ];
+
+  document.getElementById('compareGrid').innerHTML=metrics.map(m=>{
+    const verdict=m.sWin?'SmartMax wins':m.fWin?'FCFS leads':'Tied';
+    const vCl=m.sWin?'win':m.fWin?'lose':'tie';
+    return `<div class="cmp-card">
+      <div class="cmp-label">${m.label}</div>
+      <div class="cmp-row">
+        <div class="cmp-val smart-v">${m.sv}</div>
+        <div class="cmp-vs">vs</div>
+        <div class="cmp-val fcfs-v">${m.fv}</div>
+      </div>
+      <div class="cmp-verdict ${vCl}">${verdict}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAll(){
+  if(!smartState||!fcfsState) return;
+  renderKPIs('kpiSmart',smartState,'var(--smart)');
+  renderKPIs('kpiFCFS',fcfsState,'var(--fcfs)');
+  renderEVList('evListSmart',smartState,false);
+  renderEVList('evListFCFS',fcfsState,true);
+  renderLog('logSmart',smartState);
+  renderLog('logFCFS',fcfsState);
+  renderComparison();
+  document.getElementById('clock').textContent=fmtTime(simTime);
+}
+
+// ═══ MAIN SIMULATION LOOP ═══
+function tick(){
+  simTick++; simTime+=30;
+
+  // Only tick scenarios that haven't finished
+  if(!smartState.finishedAt) smartTick(smartState);
+  if(!fcfsState.finishedAt) fcfsTick(fcfsState);
+
+  // Check each scenario individually for completion
+  if(!smartState.finishedAt){
+    const sDone=smartState.evs.every(e=>e.status==='done'||!e.connected);
+    if(sDone){
+      smartState.finishedAt=simTime;
+      addLog(smartState,`<span class="elog-hl" style="color:var(--green)">✅ ALL EVs COMPLETE — ${fmtTime(simTime)}</span>`);
+    }
+  }
+  if(!fcfsState.finishedAt){
+    // FCFS is only truly finished when:
+    // 1. All EVs have reached target SoC (status=done or disconnected after done)
+    // 2. No EVs are still in delay (unplugging) state
+    // 3. No EVs are still in plugin (plugging in) state
+    // 4. No EVs are still charging (shouldn't happen if all at target, but safety check)
+    const fAllDone=fcfsState.evs.every(e=>
+      e.status==='done' || !e.connected
+    );
+    const fNoneActive=fcfsState.evs.filter(e=>
+      e.status==='delay' || e.status==='plugin' || e.status==='charging'
+    ).length===0;
+    if(fAllDone && fNoneActive){
+      fcfsState.finishedAt=simTime;
+      addLog(fcfsState,`<span class="elog-hl" style="color:var(--fcfs)">✅ ALL EVs COMPLETE — ${fmtTime(simTime)}</span>`);
+    }
+  }
+
+  renderAll();
+  if(simTick%3===0){
+    updateChart(chartSmart,smartState);
+    updateChart(chartFCFS,fcfsState);
+  }
+
+  // Auto-stop when both scenarios are finished
+  if(smartState.finishedAt && fcfsState.finishedAt && !simDone){
+    simDone=true;
+    renderAll();
+    updateChart(chartSmart,smartState);
+    updateChart(chartFCFS,fcfsState);
+    pauseSim();
+  }
+}
+
+// ═══ CONTROLS ═══
+function runSim(){
+  if(simRunning) return;
+  if(!smartState){
+    generateFleet();
+    smartState=smartInit();
+    fcfsState=fcfsInit();
+    initCharts();
+    addLog(smartState,`<span class="elog-hl">Scheduler started</span> — ${smartState.ports} ports, ${smartState.power} kW, ${smartState.evs.length} EVs`);
+    addLog(fcfsState,`<span class="elog-hl">FCFS started</span> — ${fcfsState.ports} ports, ${fcfsState.power} kW, ${fcfsState.evs.length} EVs`);
+    // FCFS: first N take ports immediately
+    for(let p=0;p<fcfsState.ports&&p<fcfsState.evs.length;p++){
+      fcfsState.portSlots[p]=fcfsState.evs[p].id;
+      fcfsState.evs[p].status='charging';
+      addLog(fcfsState,`<span class="elog-hl" style="color:var(--blue)">↑ ${fcfsState.evs[p].name}</span> → Port ${p+1}`);
+    }
+    smartAllocate(smartState);
+    renderAll();
+  }
+  simRunning=true;
+  document.getElementById('btnRun').style.display='none';
+  document.getElementById('btnPause').style.display='';
+  document.getElementById('liveDot').classList.remove('off');
+  // Disable config
+  document.querySelectorAll('.config-grid input,.config-grid select').forEach(el=>el.disabled=true);
+  simInterval=setInterval(tick,tickMs*100);
+}
+
+function pauseSim(){
+  simRunning=false;
+  clearInterval(simInterval);
+  document.getElementById('btnRun').textContent='▶ Resume';
+  document.getElementById('btnRun').style.display='';
+  document.getElementById('btnPause').style.display='none';
+  document.getElementById('liveDot').classList.add('off');
+}
+
+function resetAll(){
+  pauseSim();
+  simTick=0;simTime=0;simDone=false;
+  smartState=null;fcfsState=null;sharedFleet=[];
+  [chartSmart,chartFCFS].forEach(c=>{if(c)c.destroy();});
+  chartSmart=null;chartFCFS=null;
+  document.getElementById('btnRun').textContent='▶ Run Comparison';
+  document.getElementById('kpiSmart').innerHTML='';
+  document.getElementById('kpiFCFS').innerHTML='';
+  document.getElementById('evListSmart').innerHTML='';
+  document.getElementById('evListFCFS').innerHTML='';
+  document.getElementById('logSmart').innerHTML='<div class="elog-evt"><span class="elog-t">--:--</span><span class="elog-m">Awaiting start</span></div>';
+  document.getElementById('logFCFS').innerHTML='<div class="elog-evt"><span class="elog-t">--:--</span><span class="elog-m">Awaiting start</span></div>';
+  document.getElementById('compareGrid').innerHTML='';
+  document.getElementById('clock').textContent='00:00:00';
+  document.querySelectorAll('.config-grid input,.config-grid select').forEach(el=>el.disabled=false);
+  initCharts();
+}
+
+function setSpd(ms,btn){
+  tickMs=ms;
+  document.querySelectorAll('.spd').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(simRunning){clearInterval(simInterval);simInterval=setInterval(tick,tickMs*100);}
+}
+
+initCharts();
+</script>
+</body>
+</html>
