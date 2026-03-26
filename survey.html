@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EV Charging Readiness Survey</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0b1e3c;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+h1, h2, h3 {
+  color: #00d4ff;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+select, input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-bottom: 2px solid #00d4ff;
+  background: transparent;
+  color: white;
+}
+
+button {
+  margin-top: 30px;
+  padding: 15px;
+  width: 100%;
+  background: #00d4ff;
+  border: none;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00aacc;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>EV Charging Readiness Survey</h1>
+<p>For Condominium Management Firms & Condo Boards (Ontario)</p>
+<p>Estimated time: 3–5 minutes</p>
+
+<form action="https://formspree.io/f/YOUR_ID" method="POST">
+
+<h2>1. Organization</h2>
+
+<label>Organization Type</label>
+<select name="organization_type">
+  <option>Condo board</option>
+  <option>Property management firm</option>
+  <option>Developer</option>
+  <option>Other</option>
+</select>
+
+<label>Number of Units</label>
+<select name="units">
+  <option><100</option>
+  <option>100–500</option>
+  <option>500–2000</option>
+  <option>2000+</option>
+</select>
+
+<h2>2. Building & Parking</h2>
+
+<label>Parking Type</label>
+<select name="parking_type">
+  <option>Underground</option>
+  <option>Surface</option>
+  <option>Mixed</option>
+</select>
+
+<label>Parking Ownership</label>
+<select name="parking_ownership">
+  <option>Individually owned</option>
+  <option>Assigned</option>
+  <option>Shared</option>
+</select>
+
+<h2>3. EV Charging Status</h2>
+
+<label>Existing EV Chargers?</label>
+<select name="ev_status">
+  <option>Yes - multiple</option>
+  <option>Yes - limited</option>
+  <option>Planning</option>
+  <option>No</option>
+</select>
+
+<label>% Electrified Parking</label>
+<select name="ev_percentage">
+  <option>0%</option>
+  <option><5%</option>
+  <option>5–15%</option>
+  <option>>15%</option>
+</select>
+
+<h2>4. Demand</h2>
+
+<label>Resident EV Demand</label>
+<select name="demand">
+  <option>High</option>
+  <option>Moderate</option>
+  <option>Low</option>
+  <option>Unknown</option>
+</select>
+
+<label>Expected Growth</label>
+<select name="growth">
+  <option>High</option>
+  <option>Moderate</option>
+  <option>Low</option>
+</select>
+
+<h2>5. Infrastructure</h2>
+
+<label>Electrical Capacity</label>
+<select name="capacity">
+  <option>No capacity</option>
+  <option>Limited</option>
+  <option>Moderate</option>
+  <option>High</option>
+</select>
+
+<label>Main Constraint</label>
+<select name="constraint">
+  <option>Transformer</option>
+  <option>Panel capacity</option>
+  <option>Upgrade cost</option>
+  <option>Parking layout</option>
+</select>
+
+<h2>6. Financial</h2>
+
+<label>Investment Range</label>
+<select name="investment">
+  <option><$25k</option>
+  <option>$25k–$100k</option>
+  <option>$100k+</option>
+</select>
+
+<label>Payback Expectation</label>
+<select name="payback">
+  <option><5 years</option>
+  <option>5–10 years</option>
+  <option>10+ years</option>
+</select>
+
+<h2>7. Operations</h2>
+
+<label>Charging Allocation</label>
+<select name="allocation">
+  <option>Assigned</option>
+  <option>Shared</option>
+  <option>Reservation</option>
+</select>
+
+<label>Billing Method</label>
+<select name="billing">
+  <option>App-based</option>
+  <option>Direct billing</option>
+  <option>Flat fee</option>
+</select>
+
+<h2>8. Strategy</h2>
+
+<label>Interested in Shared Fast Charging?</label>
+<select name="shared">
+  <option>Yes</option>
+  <option>Maybe</option>
+  <option>No</option>
+</select>
+
+<label>Deployment Timeline</label>
+<select name="timeline">
+  <option>0–2 years</option>
+  <option>3–5 years</option>
+  <option>5+ years</option>
+</select>
+
+<h2>9. Contact (Optional)</h2>
+
+<input type="text" name="name" placeholder="Name">
+<input type="text" name="company" placeholder="Company">
+<input type="email" name="email" placeholder="Email">
+
+<button type="submit">Submit Survey</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
