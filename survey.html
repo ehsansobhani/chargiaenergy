@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EV Charging Readiness Survey</title>
+<title>EV Charging Survey</title>
 
 <style>
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   background: #0b1e3c;
   color: white;
   margin: 0;
@@ -19,21 +19,72 @@ body {
   padding: 40px 20px;
 }
 
-h1, h2 {
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  width: 120px;
+}
+
+h1 {
+  text-align: center;
   color: #00d4ff;
+  margin-bottom: 10px;
+}
+
+h2 {
+  color: #00d4ff;
+  margin-top: 40px;
+  margin-bottom: 15px;
 }
 
 label {
   display: block;
-  margin-top: 10px;
+  margin-top: 18px;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
-input, select {
+.options {
+  margin-top: 8px;
+  margin-left: 10px;
+}
+
+.options input {
   margin-right: 8px;
 }
 
+select, input[type="text"], input[type="email"] {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 5px;
+  border: none;
+}
+
 .section {
+  margin-top: 35px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+button {
   margin-top: 30px;
+  padding: 14px 30px;
+  background: #00d4ff;
+  color: #0b1e3c;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00aacc;
 }
 </style>
 </head>
@@ -42,25 +93,36 @@ input, select {
 
 <div class="container">
 
-<h1>EV Charging Infrastructure Readiness & Deployment Assessment</h1>
-<!-- <p>Condominium Sector (Ontario) — Estimated time: 6–7 minutes</p> -->
+<!-- LOGO -->
+<div class="logo">
+<img src="logo.png" alt="Logo">
+</div>
+
+<h1>EV Charging Infrastructure Readiness Survey</h1>
+<p style="text-align:center; opacity:0.8;">
+Estimated completion time: 6–7 minutes
+</p>
 
 <form action="https://formspree.io/f/mgopvvpp" method="POST">
 
+<input type="hidden" name="_redirect" value="thank-you.html">
+
 <!-- SECTION 1 -->
 <div class="section">
-<h2>1. Organization & Portfolio Profile</h2>
+<h2>1. Organization Profile</h2>
 
-<label>1. Organization type:</label>
-<input type="radio" name="org" value="Private landlord">Private landlord
-<input type="radio" name="org" value="Mid-size">Mid-size portfolio owner
-<input type="radio" name="org" value="Large">Large portfolio owner
-<input type="radio" name="org" value="Management">Property management company
-<input type="radio" name="org" value="REIT">REIT / institutional investor
-<input type="radio" name="org" value="Non-profit">Non-profit / co-op
-<input type="radio" name="org" value="Other">Other
+<label>What best describes your organization type?</label>
+<div class="options">
+<input type="radio" name="org">Private landlord<br>
+<input type="radio" name="org">Mid-size portfolio owner<br>
+<input type="radio" name="org">Large portfolio owner<br>
+<input type="radio" name="org">Property management company<br>
+<input type="radio" name="org">REIT / institutional investor<br>
+<input type="radio" name="org">Non-profit / co-op<br>
+<input type="radio" name="org">Other
+</div>
 
-<label>2. Number of units:</label>
+<label>Approximately how many residential units are in your portfolio?</label>
 <select name="units">
 <option><100</option>
 <option>100–500</option>
@@ -69,7 +131,7 @@ input, select {
 <option>10,000+</option>
 </select>
 
-<label>3. Location:</label>
+<label>Which geographic area best describes your portfolio?</label>
 <select name="location">
 <option>GTA</option>
 <option>Ottawa</option>
@@ -79,18 +141,20 @@ input, select {
 <option>Multiple regions</option>
 </select>
 </div>
-<input type="hidden" name="_redirect" value="thank-you.html">
+
 <!-- SECTION 2 -->
 <div class="section">
-<h2>2. Building & Parking</h2>
+<h2>2. Building & Parking Characteristics</h2>
 
-<label>4. Parking type:</label>
-<input type="radio" name="parking" value="Underground">Underground
-<input type="radio" name="parking" value="Surface">Surface
-<input type="radio" name="parking" value="Mixed">Mixed
-<input type="radio" name="parking" value="None">Limited/none
+<label>What type of parking infrastructure is available at your properties?</label>
+<div class="options">
+<input type="radio" name="parking">Underground parking<br>
+<input type="radio" name="parking">Surface parking<br>
+<input type="radio" name="parking">Mixed (underground + surface)<br>
+<input type="radio" name="parking">Limited or no parking
+</div>
 
-<label>5. Parking-to-unit ratio:</label>
+<label>What is the approximate parking-to-unit ratio?</label>
 <select name="ratio">
 <option><0.5</option>
 <option>0.5–1.0</option>
@@ -99,7 +163,7 @@ input, select {
 <option>Not sure</option>
 </select>
 
-<label>6. Building age:</label>
+<label>How old are the majority of your buildings?</label>
 <select name="age">
 <option>After 2015</option>
 <option>2000–2015</option>
@@ -107,36 +171,21 @@ input, select {
 <option>1960–1980</option>
 <option>Before 1960</option>
 </select>
-
-<label>7. Parking assignment:</label>
-<select name="assignment">
-<option>Yes permanent</option>
-<option>Reallocated</option>
-<option>Shared</option>
-<option>Mixed</option>
-</select>
 </div>
 
 <!-- SECTION 3 -->
 <div class="section">
 <h2>3. EV Charging Deployment</h2>
 
-<label>8. EV charging installed?</label>
+<label>What is the current status of EV charging infrastructure in your properties?</label>
 <select name="ev_install">
-<option>Yes multiple</option>
-<option>Yes few</option>
-<option>Planning</option>
-<option>No</option>
+<option>Multiple chargers installed</option>
+<option>A few chargers installed</option>
+<option>Planning stage</option>
+<option>No installation</option>
 </select>
 
-<label>9. Charger types:</label>
-<input type="checkbox" name="charger_type" value="L2">Level 2
-<input type="checkbox" name="charger_type" value="DCFC">DC Fast
-<input type="checkbox" name="charger_type" value="UnitOwner">Unit Owner-installed
-<input type="checkbox" name="charger_type" value="ThirdParty">Third-party
-<input type="checkbox" name="charger_type" value="Owner">Owner-operated
-
-<label>10. % electrified:</label>
+<label>Approximately what percentage of parking spaces are electrified?</label>
 <select name="percentage">
 <option>0%</option>
 <option><5%</option>
@@ -148,9 +197,9 @@ input, select {
 
 <!-- SECTION 4 -->
 <div class="section">
-<h2>4. Unit Owner Demand</h2>
+<h2>4. Demand & Growth</h2>
 
-<label>11. Requests for EV charging:</label>
+<label>How frequently do residents request EV charging installation?</label>
 <select name="requests">
 <option>Frequently</option>
 <option>Occasionally</option>
@@ -159,20 +208,11 @@ input, select {
 <option>Unsure</option>
 </select>
 
-<label>12. EV ownership among Unit Owners:</label>
-<select name="ownership">
-<option><5%</option>
-<option>5–10%</option>
-<option>10–20%</option>
-<option>>20%</option>
-<option>Unknown</option>
-</select>
-
-<label>13. Growth expectation:</label>
+<label>How do you expect EV adoption to grow over the next 5 years?</label>
 <select name="growth">
-<option>Significant</option>
-<option>Moderate</option>
-<option>Small</option>
+<option>Significant growth</option>
+<option>Moderate growth</option>
+<option>Small increase</option>
 <option>No change</option>
 <option>Unsure</option>
 </select>
@@ -180,63 +220,9 @@ input, select {
 
 <!-- SECTION 5 -->
 <div class="section">
-<h2>5. Electrical Infrastructure</h2>
+<h2>5. Financial Considerations</h2>
 
-<label>14. Capacity study conducted?</label>
-<select name="study">
-<option>Yes engineering</option>
-<option>Preliminary</option>
-<option>No</option>
-<option>Not sure</option>
-</select>
-
-<label>15. Service size:</label>
-<select name="service">
-<option><600A</option>
-<option>600–1200A</option>
-<option>1200–2000A</option>
-<option>>2000A</option>
-<option>Unsure</option>
-</select>
-
-<label>16. Available capacity:</label>
-<select name="capacity">
-<option>None</option>
-<option>Limited</option>
-<option>Moderate (load mgmt)</option>
-<option>High</option>
-<option>Unknown</option>
-</select>
-
-<label>Capacity estimate (kW):</label>
-<input type="text" name="kw">
-
-<label>17. Utility:</label>
-<select name="utility">
-<option>Toronto Hydro</option>
-<option>Hydro One</option>
-<option>Alectra</option>
-<option>London Hydro</option>
-<option>Ottawa Hydro</option>
-<option>Other</option>
-</select>
-
-<label>18. Constraints (max 3):</label>
-<input type="checkbox" name="constraints" value="Transformer">Transformer
-<input type="checkbox" name="constraints" value="Feeder">Feeder
-<input type="checkbox" name="constraints" value="Service upgrade">Service upgrade
-<input type="checkbox" name="constraints" value="Panel">Panel
-<input type="checkbox" name="constraints" value="Utility delay">Utility delay
-<input type="checkbox" name="constraints" value="Cost">Cost
-<input type="checkbox" name="constraints" value="Layout">Layout
-<input type="checkbox" name="constraints" value="Expertise">Expertise
-</div>
-
-<!-- SECTION 6 -->
-<div class="section">
-<h2>6. Financial</h2>
-
-<label>19. Investment:</label>
+<label>What level of investment have you allocated (or expect to allocate) for EV charging?</label>
 <select name="investment">
 <option><$25k</option>
 <option>$25k–$100k</option>
@@ -246,76 +232,29 @@ input, select {
 <option>Not evaluated</option>
 </select>
 
-<label>20. Payback:</label>
+<label>What is your acceptable payback period for EV infrastructure investments?</label>
 <select name="payback">
-<option><5</option>
-<option>5–8</option>
-<option>8–12</option>
-<option>>12</option>
+<option><5 years</option>
+<option>5–8 years</option>
+<option>8–12 years</option>
+<option>>12 years</option>
 <option>Not evaluated</option>
 </select>
-
-<label>21. Revenue sources:</label>
-<input type="checkbox" name="revenue" value="Fees">Charging fees
-<input type="checkbox" name="revenue" value="Premium">Parking premium
-<input type="checkbox" name="revenue" value="Sharing">Revenue sharing
-<input type="checkbox" name="revenue" value="Incentives">Incentives
-<input type="checkbox" name="revenue" value="Resale">Electricity resale
-<input type="checkbox" name="revenue" value="Amenity">Amenity
 </div>
 
-<!-- SECTION 7 -->
+<!-- SECTION 6 -->
 <div class="section">
-<h2>7. Operations</h2>
+<h2>6. Strategy & Planning</h2>
 
-<label>22. Allocation:</label>
-<select name="allocation">
-<option>Assigned</option>
-<option>Shared</option>
-<option>First-come</option>
-<option>Reservation</option>
-</select>
-
-<label>23. Turnover:</label>
-<select name="turnover">
-<option>Rare</option>
-<option>Occasional</option>
-<option>Frequent</option>
-<option>Shared</option>
-</select>
-
-<label>24. Billing:</label>
-<select name="billing">
-<option>Direct Unit Owner billing</option>
-<option>App/network</option>
-<option>Flat fee</option>
-<option>Sub-metering</option>
-<option>Third-party</option>
-</select>
-
-<label>25. Operator:</label>
-<select name="operator">
-<option>Management</option>
-<option>Third-party</option>
-<option>Contractor</option>
-<option>Utility</option>
-<option>Not determined</option>
-</select>
-</div>
-
-<!-- SECTION 8 -->
-<div class="section">
-<h2>8. Strategy</h2>
-
-<label>26. Shared high-power charging?</label>
+<label>Would you consider shared high-power EV charging solutions?</label>
 <select name="shared">
 <option>Yes</option>
 <option>Possibly</option>
 <option>No</option>
-<option>Need info</option>
+<option>Need more information</option>
 </select>
 
-<label>27. Timeline:</label>
+<label>What is your expected timeline for EV charging deployment?</label>
 <select name="timeline">
 <option>0–2 years</option>
 <option>3–5 years</option>
@@ -324,31 +263,10 @@ input, select {
 </select>
 </div>
 
-<!-- SECTION 9 -->
+<!-- CONTACT -->
 <div class="section">
-<h2>9. Policy Support</h2>
+<h2>Optional Contact Information</h2>
 
-<label>28. Support needed:</label>
-<input type="checkbox" name="support" value="Grants">Grants
-<input type="checkbox" name="support" value="Utility">Utility subsidies
-<input type="checkbox" name="support" value="Permitting">Permitting
-<input type="checkbox" name="support" value="Guidelines">Guidelines
-<input type="checkbox" name="support" value="Advisory">Technical support
-<input type="checkbox" name="support" value="Forecasting">Forecasting tools
-</div>
-
-<!-- SECTION 10 -->
-<div class="section">
-<h2>10. Pilot Participation</h2>
-
-<label>29. Participate?</label>
-<select name="pilot">
-<option>Yes</option>
-<option>Maybe</option>
-<option>No</option>
-</select>
-
-<h3>Contact (Optional)</h3>
 <input type="text" name="name" placeholder="Name">
 <input type="text" name="company" placeholder="Company">
 <input type="email" name="email" placeholder="Email">
