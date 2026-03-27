@@ -31,20 +31,18 @@ body {
 h1 {
   text-align: center;
   color: #00d4ff;
-  margin-bottom: 10px;
 }
 
 h2 {
   color: #00d4ff;
   margin-top: 40px;
-  margin-bottom: 15px;
 }
 
 label {
   display: block;
   margin-top: 18px;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .options {
@@ -52,23 +50,23 @@ label {
   margin-left: 10px;
 }
 
-.options input {
-  margin-right: 8px;
+.section {
+  margin-top: 40px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-select, input[type="text"], input[type="email"] {
+select, input[type="text"], input[type="email"], textarea {
   margin-top: 10px;
   padding: 10px;
   width: 100%;
-  max-width: 400px;
-  border-radius: 5px;
+  max-width: 500px;
+  border-radius: 6px;
   border: none;
 }
 
-.section {
-  margin-top: 35px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+textarea {
+  height: 120px;
 }
 
 button {
@@ -93,19 +91,16 @@ button:hover {
 
 <div class="container">
 
-<!-- LOGO -->
 <div class="logo">
-<img src="logo.svg" alt="Logo">
+<img src="logo.svg">
 </div>
 
 <h1>EV Charging Infrastructure Readiness Survey</h1>
-<p style="text-align:center; opacity:0.8;">
-Estimated completion time: 6–7 minutes
-</p>
 
 <form action="https://formspree.io/f/mgopvvpp" method="POST">
 
-<input type="hidden" name="_redirect" value="thank-you.html">
+<!-- ✅ FIXED REDIRECT -->
+<input type="hidden" name="_next" value="thank-you.html">
 
 <!-- SECTION 1 -->
 <div class="section">
@@ -113,13 +108,13 @@ Estimated completion time: 6–7 minutes
 
 <label>What best describes your organization type?</label>
 <div class="options">
-<input type="radio" name="org">Private landlord<br>
-<input type="radio" name="org">Mid-size portfolio owner<br>
-<input type="radio" name="org">Large portfolio owner<br>
-<input type="radio" name="org">Property management company<br>
-<input type="radio" name="org">REIT / institutional investor<br>
-<input type="radio" name="org">Non-profit / co-op<br>
-<input type="radio" name="org">Other
+<input type="radio" name="org" value="Private landlord"> Private landlord<br>
+<input type="radio" name="org" value="Mid-size"> Mid-size portfolio owner<br>
+<input type="radio" name="org" value="Large"> Large portfolio owner<br>
+<input type="radio" name="org" value="Management"> Property management company<br>
+<input type="radio" name="org" value="REIT"> REIT / institutional investor<br>
+<input type="radio" name="org" value="Non-profit"> Non-profit / co-op<br>
+<input type="radio" name="org" value="Other"> Other
 </div>
 
 <label>Approximately how many residential units are in your portfolio?</label>
@@ -144,14 +139,14 @@ Estimated completion time: 6–7 minutes
 
 <!-- SECTION 2 -->
 <div class="section">
-<h2>2. Building & Parking Characteristics</h2>
+<h2>2. Building & Parking</h2>
 
 <label>What type of parking infrastructure is available at your properties?</label>
 <div class="options">
-<input type="radio" name="parking">Underground parking<br>
-<input type="radio" name="parking">Surface parking<br>
-<input type="radio" name="parking">Mixed (underground + surface)<br>
-<input type="radio" name="parking">Limited or no parking
+<input type="radio" name="parking"> Underground<br>
+<input type="radio" name="parking"> Surface<br>
+<input type="radio" name="parking"> Mixed<br>
+<input type="radio" name="parking"> Limited/none
 </div>
 
 <label>What is the approximate parking-to-unit ratio?</label>
@@ -210,8 +205,8 @@ Estimated completion time: 6–7 minutes
 
 <label>How do you expect EV adoption to grow over the next 5 years?</label>
 <select name="growth">
-<option>Significant growth</option>
-<option>Moderate growth</option>
+<option>Significant</option>
+<option>Moderate</option>
 <option>Small increase</option>
 <option>No change</option>
 <option>Unsure</option>
@@ -220,9 +215,17 @@ Estimated completion time: 6–7 minutes
 
 <!-- SECTION 5 -->
 <div class="section">
-<h2>5. Financial Considerations</h2>
+<h2>5. Electrical & Financial</h2>
 
-<label>What level of investment have you allocated (or expect to allocate) for EV charging?</label>
+<label>Has an electrical capacity or feasibility study been conducted?</label>
+<select name="study">
+<option>Yes (engineering study)</option>
+<option>Preliminary assessment</option>
+<option>No</option>
+<option>Not sure</option>
+</select>
+
+<label>What level of investment have you allocated for EV charging?</label>
 <select name="investment">
 <option><$25k</option>
 <option>$25k–$100k</option>
@@ -232,7 +235,7 @@ Estimated completion time: 6–7 minutes
 <option>Not evaluated</option>
 </select>
 
-<label>What is your acceptable payback period for EV infrastructure investments?</label>
+<label>What is your acceptable payback period?</label>
 <select name="payback">
 <option><5 years</option>
 <option>5–8 years</option>
@@ -244,7 +247,7 @@ Estimated completion time: 6–7 minutes
 
 <!-- SECTION 6 -->
 <div class="section">
-<h2>6. Strategy & Planning</h2>
+<h2>6. Strategy</h2>
 
 <label>Would you consider shared high-power EV charging solutions?</label>
 <select name="shared">
@@ -261,6 +264,17 @@ Estimated completion time: 6–7 minutes
 <option>5–10 years</option>
 <option>No plans</option>
 </select>
+</div>
+
+<!-- COMMENTS -->
+<div class="section">
+<h2>Additional Comments</h2>
+
+<label>
+Please provide any additional insights, challenges, or recommendations related to EV charging infrastructure:
+</label>
+
+<textarea name="comments" placeholder="Enter your comments here..."></textarea>
 </div>
 
 <!-- CONTACT -->
