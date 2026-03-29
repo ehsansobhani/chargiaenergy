@@ -129,7 +129,7 @@ nav a.cta-link:hover{background:#00e65c;}
 }
 .hero-btn:hover{background:#00e65c;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,200,83,0.25);}
 
-/* hero visual */
+/* /* hero visual */
 .hero-visual{position:relative;height:470px;}
 
 
@@ -147,6 +147,45 @@ nav a.cta-link:hover{background:#00e65c;}
   top:42%;left:42%;transform:translate(-50%,-50%);
   width:220px;border-color:rgba(34,211,238,0.2);text-align:center;
   animation-delay:.2s;
+} */
+  .hero-visual {
+  position: relative;
+  height: 470px;
+}
+
+/* Base card */
+.stat-card {
+  position: absolute;
+  background: var(--navy);
+  border: 1px solid var(--border-green);
+  border-radius: var(--radius);
+  padding: 26px;
+  backdrop-filter: blur(10px);
+  animation: floatIn .8s ease-out both;
+}
+
+/* Top-left card */
+.stat-card.main {
+  top: 20px;
+  left: 20px;
+  width: 300px;
+}
+
+/* Center card (clean center, no weird 42%) */
+.stat-card.mid {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  border-color: rgba(34,211,238,0.2);
+  text-align: center;
+}
+
+/* Bottom-right card */
+.stat-card.secondary {
+  bottom: 20px;
+  right: 20px;
+  width: 260px;
 }
 
 @keyframes floatIn{
