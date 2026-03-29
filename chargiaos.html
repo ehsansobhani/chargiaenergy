@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)https://chargiaos.polsia.app/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChargiaOS - Operating System for Chargia Energy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./ChargiaOS - Operating System for Chargia Energy_files/css2" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --chargia-green: #00C853;
+            --chargia-dark: #0A0E17;
+            --chargia-navy: #111827;
+            --chargia-slate: #1E293B;
+            --chargia-gray: #94A3B8;
+            --chargia-light: #E2E8F0;
+            --chargia-white: #F8FAFC;
+            --chargia-accent: #22D3EE;
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--chargia-dark);
+            color: var(--chargia-light);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Grid background */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 200, 83, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 200, 83, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .content { position: relative; z-index: 1; }
+
+        /* Nav */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--chargia-white);
+            letter-spacing: -0.5px;
+        }
+        
+        .logo span { color: var(--chargia-green); }
+        
+        .nav-tag {
+            font-size: 12px;
+            color: var(--chargia-gray);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        /* Hero */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 48px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--chargia-green);
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .hero-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--chargia-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.08;
+            color: var(--chargia-white);
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+        
+        .hero h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--chargia-green), var(--chargia-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-desc {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--chargia-gray);
+            max-width: 480px;
+        }
+
+        /* Hero visual */
+        .hero-visual {
+            position: relative;
+            height: 420px;
+        }
+        
+        .stat-card {
+            position: absolute;
+            background: var(--chargia-navy);
+            border: 1px solid rgba(0, 200, 83, 0.15);
+            border-radius: 16px;
+            padding: 28px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-card.main {
+            top: 0; left: 20px;
+            width: 320px;
+        }
+        
+        .stat-card.secondary {
+            bottom: 40px; right: 0;
+            width: 280px;
+        }
+        
+        .stat-card.accent {
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 240px;
+            border-color: rgba(34, 211, 238, 0.2);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--chargia-green);
+            line-height: 1;
+        }
+        
+        .stat-card.accent .stat-number {
+            color: var(--chargia-accent);
+            font-size: 36px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--chargia-gray);
+            margin-top: 8px;
+        }
+        
+        .stat-sub {
+            font-size: 12px;
+            color: rgba(148, 163, 184, 0.5);
+            margin-top: 4px;
+        }
+        
+        .mini-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            margin-top: 16px;
+            height: 40px;
+        }
+        
+        .bar {
+            width: 12px;
+            border-radius: 3px 3px 0 0;
+            background: linear-gradient(to top, rgba(0, 200, 83, 0.3), var(--chargia-green));
+        }
+
+        /* Divider */
+        .divider {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+        
+        .divider hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 200, 83, 0.2), transparent);
+        }
+
+        /* Capabilities */
+        .capabilities {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 48px;
+        }
+        
+        .section-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--chargia-green);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+        
+        .capabilities h2 {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--chargia-white);
+            margin-bottom: 60px;
+            letter-spacing: -1.5px;
+            max-width: 600px;
+        }
+        
+        .cap-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        .cap-card {
+            background: var(--chargia-navy);
+            border: 1px solid rgba(148, 163, 184, 0.08);
+            border-radius: 16px;
+            padding: 36px;
+            transition: border-color 0.3s;
+        }
+        
+        .cap-card:hover {
+            border-color: rgba(0, 200, 83, 0.25);
+        }
+        
+        .cap-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        
+        .cap-icon.green { background: rgba(0, 200, 83, 0.12); }
+        .cap-icon.blue { background: rgba(34, 211, 238, 0.12); }
+        .cap-icon.amber { background: rgba(251, 191, 36, 0.12); }
+        .cap-icon.purple { background: rgba(168, 85, 247, 0.12); }
+        
+        .cap-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--chargia-white);
+            margin-bottom: 10px;
+        }
+        
+        .cap-card p {
+            font-size: 15px;
+            line-height: 1.65;
+            color: var(--chargia-gray);
+        }
+
+        /* Market section */
+        .market {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 48px;
+        }
+        
+        .market h2 {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--chargia-white);
+            margin-bottom: 60px;
+            letter-spacing: -1.5px;
+        }
+        
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+        
+        .market-stat {
+            text-align: center;
+            padding: 40px 24px;
+            background: var(--chargia-navy);
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.06);
+        }
+        
+        .market-stat .big-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+        
+        .market-stat:nth-child(1) .big-num { color: var(--chargia-green); }
+        .market-stat:nth-child(2) .big-num { color: var(--chargia-accent); }
+        .market-stat:nth-child(3) .big-num { color: #FBBF24; }
+        
+        .market-stat .stat-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--chargia-white);
+            margin-bottom: 6px;
+        }
+        
+        .market-stat .stat-desc {
+            font-size: 13px;
+            color: var(--chargia-gray);
+        }
+
+        /* Closing */
+        .closing {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 48px;
+            text-align: center;
+        }
+        
+        .closing h2 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--chargia-white);
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .closing h2 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--chargia-green), var(--chargia-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .closing p {
+            font-size: 18px;
+            color: var(--chargia-gray);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 48px;
+            border-top: 1px solid rgba(148, 163, 184, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-left {
+            font-size: 13px;
+            color: var(--chargia-gray);
+        }
+        
+        .footer-right {
+            font-size: 12px;
+            color: rgba(148, 163, 184, 0.4);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            nav { padding: 20px 24px; }
+            
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 48px 24px 40px;
+                gap: 48px;
+            }
+            
+            .hero h1 { font-size: 36px; letter-spacing: -1px; }
+            .hero-desc { font-size: 16px; }
+            
+            .hero-visual { height: 300px; }
+            .stat-card.main { width: 240px; left: 0; }
+            .stat-card.secondary { width: 220px; right: 0; bottom: 20px; }
+            .stat-card.accent { width: 180px; }
+            .stat-number { font-size: 32px; }
+            
+            .capabilities, .market, .closing { padding: 60px 24px; }
+            .capabilities h2, .market h2 { font-size: 28px; }
+            .closing h2 { font-size: 32px; }
+            
+            .cap-grid { grid-template-columns: 1fr; }
+            .market-stats { grid-template-columns: 1fr; gap: 16px; }
+            .market-stat .big-num { font-size: 40px; }
+            
+            .divider { padding: 0 24px; }
+            footer { padding: 30px 24px; flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="content">
+        <nav>
+            <div class="logo">Chargia<span>OS</span></div>
+            <div class="nav-tag">Charging-as-a-Service</div>
+        </nav>
+
+        <section class="hero">
+            <div>
+                <div class="hero-label">Operations Intelligence</div>
+                <h1>Every building <em>charged.</em> Every watt <em>optimized.</em></h1>
+                <p class="hero-desc">ChargiaOS is the operating backbone for Chargia Energy, turning multi-residential EV charging into a managed, scalable service across Canada's fastest-growing buildings.</p>
+            </div>
+            <div class="hero-visual">
+                <div class="stat-card main">
+                    <div class="stat-number">167K</div>
+                    <div class="stat-label">Charging ports needed</div>
+                    <div class="stat-sub">Toronto region by 2040</div>
+                    <div class="mini-chart">
+                        <div class="bar" style="height: 15%"></div>
+                        <div class="bar" style="height: 22%"></div>
+                        <div class="bar" style="height: 30%"></div>
+                        <div class="bar" style="height: 38%"></div>
+                        <div class="bar" style="height: 50%"></div>
+                        <div class="bar" style="height: 58%"></div>
+                        <div class="bar" style="height: 70%"></div>
+                        <div class="bar" style="height: 82%"></div>
+                        <div class="bar" style="height: 95%"></div>
+                        <div class="bar" style="height: 100%"></div>
+                    </div>
+                </div>
+                <div class="stat-card accent">
+                    <div class="stat-number">2035</div>
+                    <div class="stat-label">Canada's ZEV mandate</div>
+                    <div class="stat-sub">100% zero-emission sales</div>
+                </div>
+                <div class="stat-card secondary">
+                    <div class="stat-number">1.6M</div>
+                    <div class="stat-label">EV-ready retrofits required</div>
+                    <div class="stat-sub">Apartments &amp; condos, major cities</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"><hr></div>
+
+        <section class="capabilities">
+            <div class="section-label">What It Runs</div>
+            <h2>Four pillars of autonomous EV infrastructure</h2>
+            <div class="cap-grid">
+                <div class="cap-card">
+                    <div class="cap-icon green">⚡</div>
+                    <h3>Infrastructure Assessment</h3>
+                    <p>Automated analysis of electrical capacity, parking layouts, and tenant EV demand. Every building gets a readiness score before a single charger is installed.</p>
+                </div>
+                <div class="cap-card">
+                    <div class="cap-icon blue">⚙</div>
+                    <h3>Smart Charger Deployment</h3>
+                    <p>Scalable hardware rollouts tailored to each building's unique electrical profile. Start with 5 chargers, expand to 50 without rewiring the building.</p>
+                </div>
+                <div class="cap-card">
+                    <div class="cap-icon amber">⚗</div>
+                    <h3>Power Management</h3>
+                    <p>Research-grade load balancing algorithms that schedule charging across tenants without tripping breakers or requiring expensive panel upgrades.</p>
+                </div>
+                <div class="cap-card">
+                    <div class="cap-icon purple">📊</div>
+                    <h3>Network Operation</h3>
+                    <p>End-to-end billing, real-time monitoring, and charger maintenance. Property managers get a hands-off experience while tenants get reliable charging.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"><hr></div>
+
+        <section class="market">
+            <div class="section-label">The Opportunity</div>
+            <h2>Canada's buildings aren't ready. We're fixing that.</h2>
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="big-num">50%</div>
+                    <div class="stat-title">ZEVIP Coverage</div>
+                    <div class="stat-desc">Government funds up to half of project costs for multi-unit installations</div>
+                </div>
+                <div class="market-stat">
+                    <div class="big-num">10x</div>
+                    <div class="stat-title">Charger Density</div>
+                    <div class="stat-desc">Smart load management installs 10x more chargers on existing infrastructure</div>
+                </div>
+                <div class="market-stat">
+                    <div class="big-num">56%</div>
+                    <div class="stat-title">YoY EV Growth</div>
+                    <div class="stat-desc">Canadian EV sales climbing year over year with no signs of slowing</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing">
+            <h2>Built on <em>research.</em> Scaled by <em>algorithms.</em></h2>
+            <p>Every optimization decision inside Chargia Energy is powered by peer-reviewed smart grid research. Not marketing. Not guesswork. Science applied to infrastructure at scale.</p>
+        </section>
+
+        <footer>
+            <div class="footer-left">Operating System for Chargia Energy</div>
+            <div class="footer-right">Toronto, Canada • 2026</div>
+        </footer>
+    </div>
+
+</body></html>
